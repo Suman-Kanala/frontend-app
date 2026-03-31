@@ -271,7 +271,7 @@ export default function InterviewSupport() {
 
     try {
       await submitProof({
-        bookingId: bookingData.booking._id,
+        bookingId: bookingData.bookingId,
         upiTransactionId: upiTransactionId.trim(),
         proofKey,
       }).unwrap();

@@ -92,28 +92,6 @@ async function proxyRequest(request: NextRequest, context: ProxyContext): Promis
   }
 }
 
-    const response = await fetch(backendUrl, options);
-    const data = await response.text();
-
-    // Try to parse as JSON, fallback to text
-    let jsonData: unknown;
-    try {
-      jsonData = JSON.parse(data);
-    } catch {
-      jsonData = data;
-    }
-
-    return NextResponse.json(jsonData, { status: response.status });
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('API proxy error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error', message: errorMessage } as ErrorResponse,
-      { status: 500 }
-    );
-  }
-}
-
 export async function GET(request: NextRequest, context: ProxyContext): Promise<NextResponse> {
   return proxyRequest(request, context);
 }

@@ -8,6 +8,12 @@ const baseUrl =
     ? '/api'
     : process.env.NEXT_PUBLIC_API_URL || 'https://api.saanvicareers.com/api';
 
+// Direct backend URL — bypasses Next.js proxy for large file uploads
+const directApiUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3001/api'
+    : process.env.NEXT_PUBLIC_API_URL || 'https://api.saanvicareers.com/api';
+
 const baseQuery = axiosBaseQuery({ baseUrl });
 
 interface TagDefinition {
@@ -112,6 +118,10 @@ export const appApi = createApi({
 
     getAdminCourses: builder.query({
       query: () => ({ url: "/courses/admin/all" }),
+      transformResponse: (response: any) => {
+        if (Array.isArray(response)) return response;
+        return response?.courses || [];
+      },
       providesTags: (result: any) => [
         { type: "CourseList", id: "ADMIN" },
         ...listTags("Course", result),
@@ -146,9 +156,13 @@ export const appApi = createApi({
 
     getMyEnrollments: builder.query({
       query: () => ({ url: "/enrollments/my" }),
+      transformResponse: (response: any) => {
+        if (Array.isArray(response)) return response;
+        return response?.enrollments || [];
+      },
       providesTags: (result: any) => [
         { type: "Enrollment", id: "MY" },
-        ...listTags("Enrollment", result),
+        ...listTags("Enrollment", Array.isArray(result) ? result : []),
       ] as any,
     }),
 
@@ -215,15 +229,20 @@ export const appApi = createApi({
 
     getCourseVideos: builder.query({
       query: (courseId: string) => ({ url: `/videos/course/${courseId}` }),
+      transformResponse: (response: any) => {
+        const result = Array.isArray(response) ? response : (response?.videos || []);
+        return result;
+      },
       providesTags: (result: any, _error: any, courseId: string) => [
         { type: "Video", id: `COURSE-${courseId}` },
-        ...listTags("Video", result),
+        ...listTags("Video", Array.isArray(result) ? result : []),
       ] as any,
     }),
 
     uploadVideo: builder.mutation({
-      query: ({ formData, onUploadProgress }) => ({
-        url: "/upload/video",
+      query: ({ formData, courseId, onUploadProgress }) => ({
+        // Use direct backend URL to bypass any proxy body size limits (dev & prod)
+        url: `${directApiUrl}/upload/video?courseId=${courseId}`,
         method: "POST",
         data: formData,
         onUploadProgress,

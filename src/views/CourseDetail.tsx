@@ -173,10 +173,11 @@ export default function CourseDetail() {
   const { data: courseData, isLoading: courseLoading, error: courseError } = useGetCourseDetailQuery(slug || '', { skip: !slug });
   const course = courseData?.course ? { ...courseData.course, videos: [...(courseData.videos || [])] } : null;
 
-  const { data: enrollmentData, refetch: refetchEnrollment } = useGetEnrollmentCheckQuery(course?._id, { skip: !isAuthenticated || !course?._id });
+  const { data: enrollmentData, refetch: refetchEnrollment, isLoading: enrollmentLoading, isFetching: enrollmentFetching } = useGetEnrollmentCheckQuery(course?._id, { skip: !isAuthenticated || !course?._id });
   const enrolled = enrollmentData?.enrolled || false;
   const enrollment = enrollmentData?.enrollment || null;
-  const enrollmentChecked = !isAuthenticated || !!enrollmentData;
+  // Only consider enrollment checked when the query has actually settled (not loading/fetching)
+  const enrollmentChecked = !isAuthenticated || (!enrollmentLoading && !enrollmentFetching && enrollmentData !== undefined);
 
   const [getVideoStream] = useLazyGetVideoStreamQuery();
   const { data: commentsData, isLoading: commentsLoading, refetch: refetchComments } = useGetCommentsByVideoQuery(activeVideo?._id || '', { skip: !activeVideo?._id });
@@ -343,7 +344,7 @@ export default function CourseDetail() {
     if (video?.isUnlocked) setActiveVideo(video);
   }, []);
 
-  const completedCount = enrollment?.progress?.completedVideos?.length || 0;
+  const completedCount = Math.min(enrollment?.progress?.completedVideos?.length || 0, videos.length);
   const progressPercent = videos.length ? Math.round((completedCount / videos.length) * 100) : 0;
   const activeIndex = videos.findIndex((video) => video._id === activeVideo?._id);
   const previousLesson = activeIndex > 0 ? videos[activeIndex - 1] : null;
@@ -358,7 +359,7 @@ export default function CourseDetail() {
     .filter(Boolean)
     .slice(0, 4);
 
-  if (courseLoading || authLoading) {
+  if (courseLoading || authLoading || (isAuthenticated && course?._id && (enrollmentLoading || enrollmentFetching))) {
     return <div className="min-h-screen flex items-center justify-center bg-slate-950"><Loader2 className="h-10 w-10 animate-spin text-cyan-300" /></div>;
   }
   if (courseError) {

@@ -3,7 +3,6 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import emailjs from "@emailjs/browser";
 import {
   Mail,
   Phone,
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import NewsTicker from "@/components/NewsTicker";
+import api from "@/lib/api";
 
 const WHATSAPP_NUMBER =
   process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "918074172398";
@@ -65,78 +65,30 @@ const Contact: React.FC<ContactProps> = () => {
   const isValidEmail = (email: string): boolean =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.inquiry_type ||
-      !formData.message
-    ) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+    if (!formData.name || !formData.email || !formData.inquiry_type || !formData.message) {
+      toast({ title: "Missing Information", description: "Please fill in all required fields.", variant: "destructive" });
       return;
     }
 
     if (!isValidEmail(formData.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
+      toast({ title: "Invalid Email", description: "Please enter a valid email address.", variant: "destructive" });
       return;
     }
 
     setIsSubmitting(true);
-
-    emailjs
-      .send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone || "Not provided",
-          company: formData.company || "Not provided",
-          inquiry_type: formData.inquiry_type,
-          message: formData.message,
-          name: formData.name,
-          email: formData.email,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          toast({
-            title: "Message Sent!",
-            description:
-              "Thank you for contacting us. We'll get back to you shortly.",
-          });
-          setFormData({
-            name: "",
-            email: "",
-            phone: "",
-            company: "",
-            inquiry_type: "",
-            message: "",
-          });
-          setSubmitted(true);
-        },
-        () => {
-          toast({
-            title: "Submission Failed",
-            description: "Something went wrong. Please try again later.",
-            variant: "destructive",
-          });
-        }
-      )
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+    try {
+      await api.post('/contact', formData);
+      toast({ title: "Message Sent!", description: "Thank you for contacting us. We'll get back to you shortly." });
+      setFormData({ name: "", email: "", phone: "", company: "", inquiry_type: "", message: "" });
+      setSubmitted(true);
+    } catch {
+      toast({ title: "Submission Failed", description: "Something went wrong. Please try again later.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inquiryOptions: InquiryOption[] = [

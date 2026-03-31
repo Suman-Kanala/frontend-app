@@ -134,7 +134,7 @@ const NewsTicker: React.FC<NewsTickerProps> = () => {
       >
         {news.map((item: NewsItem, i: number) => (
           <a
-            key={i}
+            key={`${item.link}-${i}`}
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"

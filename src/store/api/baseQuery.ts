@@ -58,7 +58,7 @@ export const axiosBaseQuery: (options?: BaseQueryOptions) => BaseQueryFn<QueryRe
       }
 
       const result: AxiosResponse = await axios({
-        url: `${baseUrl}${url}`,
+        url: url.startsWith('http') ? url : `${baseUrl}${url}`,
         method,
         data,
         params,

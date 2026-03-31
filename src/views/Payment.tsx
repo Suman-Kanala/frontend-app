@@ -75,8 +75,14 @@ export default function Payment() {
         }
       } catch (err: any) {
         if (!cancelled) {
-          setError(getErrorMessage(err, "Failed to initiate payment. Please try again."));
-          setState("showQR"); // still show UI so user can see the error
+          const msg = getErrorMessage(err, "");
+          // Already enrolled → redirect to the course
+          if (msg.toLowerCase().includes("already enrolled")) {
+            router.replace(`/courses/${courseId}`);
+            return;
+          }
+          setError(msg || "Failed to initiate payment. Please try again.");
+          setState("showQR");
         }
       }
     }

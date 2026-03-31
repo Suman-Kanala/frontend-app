@@ -12,8 +12,11 @@ const nextConfig = {
   // Optimize package imports
   transpilePackages: ['@radix-ui'],
 
-  // Experimental optimizations
+  // Allow large file uploads through the proxy (10GB for videos)
   experimental: {
+    serverActions: {
+      bodySizeLimit: '10gb',
+    },
     optimizePackageImports: [
       'lucide-react',
       '@radix-ui/react-icons',
@@ -21,8 +24,8 @@ const nextConfig = {
     ],
   },
 
-  // Turbopack configuration (empty to silence warning)
-  turbopack: {},
+  // Increase middleware body size limit for large video uploads
+  middlewareClientMaxBodySize: '10gb',
 
   // Disable dev indicators (removes Next.js icon in bottom corner)
   devIndicators: {

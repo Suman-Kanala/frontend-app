@@ -52,14 +52,12 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const clerkLoaded = userLoaded && authLoaded;
   const isAuthenticated = !!isSignedIn;
 
-  // Wire up token getter for api client
-  useEffect(() => {
-    if (isAuthenticated) {
-      setTokenGetter(() => getToken());
-    } else {
-      setTokenGetter(null);
-    }
-  }, [isAuthenticated, getToken]);
+  // Wire up token getter for api client — set synchronously so queries have the token on first fire
+  if (isAuthenticated) {
+    setTokenGetter(getToken);
+  } else {
+    setTokenGetter(null);
+  }
 
   // Sync user to backend after login
   const syncUser = useCallback(async (): Promise<void> => {

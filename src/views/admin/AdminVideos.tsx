@@ -35,7 +35,8 @@ interface VideoForm {
 const emptyVideoForm: VideoForm = { title: '', description: '', order: '', duration: '', isPreview: false };
 
 export default function AdminVideos() {
-  const { courseId } = useParams();
+  const params = useParams();
+  const courseId = typeof params.courseId === 'string' ? params.courseId : Array.isArray(params.courseId) ? params.courseId[0] : undefined;
   const router = useRouter();
 
   // Upload state
@@ -58,6 +59,7 @@ export default function AdminVideos() {
     data: videos = [],
     isLoading: videosLoading,
     error: videosError,
+    refetch: refetchVideos,
   } = useGetCourseVideosQuery(courseId as string, { skip: !courseId });
   const [uploadVideo] = useUploadVideoMutation();
   const [createVideo] = useCreateVideoMutation();
@@ -67,7 +69,7 @@ export default function AdminVideos() {
     () => adminCourses.find((entry: any) => entry._id === courseId) || null,
     [adminCourses, courseId]
   );
-  const loading = coursesLoading || videosLoading;
+  const loading = coursesLoading || videosLoading || !courseId;
   const error = coursesError || videosError;
 
   async function handleUpload(e: any): Promise<void> {
@@ -88,10 +90,10 @@ export default function AdminVideos() {
     try {
       const formData = new FormData();
       formData.append('file', videoFile);
-      formData.append('courseId', String(courseId));
 
       const uploadResult = await uploadVideo({
         formData,
+        courseId: String(courseId),
         onUploadProgress: (evt: ProgressEvent) => {
           if (evt.lengthComputable) setUploadProgress(Math.round((evt.loaded / evt.total) * 100));
         },
@@ -104,7 +106,7 @@ export default function AdminVideos() {
 
       await createVideo({
         courseId,
-        title: uploadForm.title || videoFile.name.replace(/\.[^.]+$/, ''),
+        title: uploadForm.title || videoFile.name.replace(/[-_]/g, ' ').replace(/\.[^.]+$/, '').replace(/\b\w/g, c => c.toUpperCase()).trim(),
         description: uploadForm.description,
         order: uploadForm.order ? Number(uploadForm.order) : undefined,
         storageKey,
@@ -118,6 +120,7 @@ export default function AdminVideos() {
       setVideoFile(null);
       setUploadForm(emptyVideoForm);
       if (fileRef.current) fileRef.current.value = '';
+      refetchVideos();
     } catch (err: any) {
       alert('Upload failed: ' + getErrorMessage(err));
     } finally {
