@@ -1,0 +1,64 @@
+.videojs-shell {
+  position: relative;
+}
+
+.videojs-shell .video-js {
+  width: 100%;
+  min-height: 28rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, rgba(96, 165, 250, 0.2), transparent 32%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.98));
+}
+
+.videojs-shell .vjs-tech {
+  border-radius: 1rem;
+}
+
+.videojs-shell .vjs-control-bar {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.18), rgba(2, 6, 23, 0.92));
+  padding-inline: 0.75rem;
+}
+
+.videojs-shell .vjs-big-play-button {
+  border: 0;
+  width: 5rem;
+  height: 5rem;
+  line-height: 5rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.92), rgba(168, 85, 247, 0.92));
+  box-shadow: 0 20px 50px rgba(37, 99, 235, 0.35);
+}
+
+.videojs-shell .vjs-big-play-button .vjs-icon-placeholder::before {
+  font-size: 2.4rem;
+}
+
+.videojs-shell .vjs-play-progress,
+.videojs-shell .vjs-volume-level {
+  background: linear-gradient(90deg, #60a5fa, #a855f7);
+}
+
+.videojs-shell .vjs-slider-bar,
+.videojs-shell .vjs-load-progress div {
+  border-radius: 999px;
+}
+
+.videojs-shell .vjs-lms-ad-marker {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f97316, #facc15);
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.7);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .videojs-shell .video-js {
+    min-height: 18rem;
+  }
+}
