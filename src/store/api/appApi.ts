@@ -210,9 +210,13 @@ export const appApi = createApi({
 
     getMyPayments: builder.query({
       query: () => ({ url: "/payments/my" }),
+      transformResponse: (response: any) => {
+        if (Array.isArray(response)) return response;
+        return response?.payments || [];
+      },
       providesTags: (result: any) => [
         { type: "Payment", id: "MY" },
-        ...listTags("Payment", result),
+        ...listTags("Payment", Array.isArray(result) ? result : []),
       ] as any,
     }),
 

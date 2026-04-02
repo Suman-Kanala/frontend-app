@@ -34,15 +34,8 @@ const nextConfig = {
   },
 
   // Rewrites for API proxy (development only)
+  // NOTE: rewrites are disabled because app/api/[...path]/route.ts handles proxying
   async rewrites() {
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: '/api/:path*',
-          destination: 'http://localhost:3001/api/:path*',
-        },
-      ];
-    }
     return [];
   },
 
