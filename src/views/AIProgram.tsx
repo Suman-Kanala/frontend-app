@@ -41,7 +41,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import emailjs from "@emailjs/browser";
 import { generateSyllabusPDF } from "@/utils/generateSyllabusPDF";
 import { useGetCoursesQuery, useGetMyEnrollmentsQuery } from "@/store/api/appApi";
 
@@ -134,12 +133,6 @@ const LivePulse = () => (
   </span>
 );
 
-/* ── EmailJS config (reuses same service as Contact form) ── */
-const EJS_SERVICE = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
-const EJS_PUBLIC = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
-// We'll use a generic template — send from_name, from_email, message
-const EJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
-
 /* ── Syllabus Download Modal ── */
 const SyllabusModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
@@ -162,26 +155,16 @@ const SyllabusModal = ({ isOpen, onClose }) => {
     setError("");
 
     try {
-      // Send lead email to Saanvi via EmailJS
-      await emailjs.send(
-        EJS_SERVICE,
-        EJS_TEMPLATE,
-        {
-          from_name: name.trim(),
-          from_email: email.trim(),
-          phone: phone.trim(),
-          company: "",
-          inquiry_type: "Gen AI Program - Syllabus Download",
-          message: `${name.trim()} (${email.trim()}, ${phone.trim() || "No phone"}) downloaded the Gen AI Program syllabus PDF.`,
-        },
-        EJS_PUBLIC
-      );
+      // Send lead email via Resend (fire-and-forget — don't block download on failure)
+      fetch('/api/syllabus-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), phone: phone.trim() }),
+      }).catch(() => {});
 
-      // Generate and download PDF
       generateSyllabusPDF();
       setDone(true);
     } catch {
-      // Still download even if email fails
       generateSyllabusPDF();
       setDone(true);
     } finally {

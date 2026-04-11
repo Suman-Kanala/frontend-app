@@ -75,11 +75,11 @@ export const appApi = createApi({
     getNews: builder.query({
       query: () => ({ url: "/news" }),
       transformResponse: (response) => {
-        // Backend returns array directly, not wrapped in { news: [...] }
         if (Array.isArray(response)) return response;
         return response?.news || [];
       },
-      keepUnusedDataFor: 300,
+      transformErrorResponse: () => [],
+      keepUnusedDataFor: 21600,
       providesTags: [{ type: "News", id: "LIST" }],
     }),
 

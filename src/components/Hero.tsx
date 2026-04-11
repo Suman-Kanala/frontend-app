@@ -38,7 +38,7 @@ const Hero: React.FC<HeroProps> = () => {
   };
 
   const handleGenAIProgram = () => {
-    router.push("/courses/ai");
+    router.push("/ai-program");
   };
 
   return (
@@ -87,7 +87,6 @@ const Hero: React.FC<HeroProps> = () => {
         tiltMaxAngleX={15}
         tiltMaxAngleY={15}
         glareBorderRadius="32px"
-        suppressHydrationWarning
       >
         <motion.div
           initial={{ opacity: 0, y: 50 }}

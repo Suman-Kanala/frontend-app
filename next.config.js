@@ -24,9 +24,6 @@ const nextConfig = {
     ],
   },
 
-  // Increase middleware body size limit for large video uploads
-  middlewareClientMaxBodySize: '10gb',
-
   // Disable dev indicators (removes Next.js icon in bottom corner)
   devIndicators: {
     appIsrStatus: false,

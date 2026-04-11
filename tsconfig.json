@@ -21,6 +21,7 @@
     "incremental": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
