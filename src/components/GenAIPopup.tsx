@@ -59,7 +59,7 @@ const GenAIPopup: React.FC<GenAIPopupProps> = () => {
             className="fixed z-[61] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] max-w-[90vw] bg-white rounded-2xl shadow-2xl overflow-hidden"
           >
             {/* Header banner */}
-            <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 px-6 py-5">
+            <div className="relative bg-gradient-to-br from-[#0a2540] to-[#1a3a5c] px-6 py-5">
               <button
                 onClick={handleDismiss}
                 className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors"
@@ -70,7 +70,7 @@ const GenAIPopup: React.FC<GenAIPopupProps> = () => {
 
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-                  <Sparkles size={18} className="text-yellow-300" />
+                  <Sparkles size={18} className="text-white/80" />
                 </div>
                 <span className="text-white/80 text-xs font-medium uppercase tracking-wider">
                   Limited Seats Available
@@ -88,13 +88,13 @@ const GenAIPopup: React.FC<GenAIPopupProps> = () => {
             <div className="px-6 py-5">
               {/* Highlights */}
               <div className="grid grid-cols-3 gap-3 mb-5">
-                <div className="text-center p-2.5 bg-blue-50 rounded-xl">
-                  <Clock size={16} className="text-blue-500 mx-auto mb-1" />
+                <div className="text-center p-2.5 bg-[#f0effe] rounded-xl">
+                  <Clock size={16} className="text-[#635bff] mx-auto mb-1" />
                   <p className="text-xs font-semibold text-gray-800">8 Weeks</p>
                   <p className="text-[10px] text-gray-500">Duration</p>
                 </div>
-                <div className="text-center p-2.5 bg-purple-50 rounded-xl">
-                  <Users size={16} className="text-purple-500 mx-auto mb-1" />
+                <div className="text-center p-2.5 bg-[#f0effe] rounded-xl">
+                  <Users size={16} className="text-[#635bff] mx-auto mb-1" />
                   <p className="text-xs font-semibold text-gray-800">500+</p>
                   <p className="text-[10px] text-gray-500">Enrolled</p>
                 </div>
@@ -108,15 +108,15 @@ const GenAIPopup: React.FC<GenAIPopupProps> = () => {
               {/* What you'll learn */}
               <ul className="space-y-2 mb-5 text-sm text-gray-600">
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#635bff] flex-shrink-0" />
                   ChatGPT, Claude, Gemini & Midjourney mastery
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#635bff] flex-shrink-0" />
                   Advanced prompt engineering techniques
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-500 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#635bff] flex-shrink-0" />
                   Real-world projects & industry certificate
                 </li>
               </ul>
@@ -124,7 +124,7 @@ const GenAIPopup: React.FC<GenAIPopupProps> = () => {
               {/* CTA */}
               <button
                 onClick={handleExplore}
-                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all group"
+                className="w-full bg-[#0a2540] hover:bg-[#0d3058] text-white py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all group"
               >
                 Explore Program
                 <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />

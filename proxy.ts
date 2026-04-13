@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { clerkFrontendApiProxy } from '@clerk/nextjs/server';
 
-export function proxy(_request: NextRequest): NextResponse {
+export async function proxy(request: NextRequest): Promise<Response> {
+  // Only forward Clerk's own API path to the Clerk handler
+  if (request.nextUrl.pathname.startsWith('/__clerk')) {
+    const clerkResponse = await clerkFrontendApiProxy(request);
+    if (clerkResponse) return clerkResponse;
+  }
+
   return NextResponse.next();
 }
 

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import './globals.css';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
+import { ClerkProvider } from '@clerk/nextjs';
 import Providers from './providers';
 import ClientLayout from './client-layout';
 
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
   },
   description:
     'Saanvi Careers connects talent with opportunities across IT, Engineering, Healthcare, Finance sectors globally.',
-  keywords: ['careers', 'jobs', 'Gen AI', 'LMS', 'interview support', 'online courses', 'placement'],
+  keywords: ['careers', 'jobs', 'recruitment', 'placement', 'IT jobs', 'engineering jobs', 'healthcare jobs', 'global hiring'],
   openGraph: {
     siteName: 'Saanvi Careers',
     type: 'website',
@@ -62,29 +63,31 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
-        />
-      </head>
-      <body suppressHydrationWarning>
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga-init" strategy="afterInteractive">
-              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{page_path:window.location.pathname});`}
-            </Script>
-          </>
-        )}
-        <Providers>
-          <ClientLayout>{children}</ClientLayout>
-        </Providers>
-      </body>
-    </html>
+    <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up" proxyUrl="/__clerk">
+      <html lang="en" suppressHydrationWarning className={inter.variable}>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+          />
+        </head>
+        <body suppressHydrationWarning>
+          {process.env.NEXT_PUBLIC_GA_ID && (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                strategy="afterInteractive"
+              />
+              <Script id="ga-init" strategy="afterInteractive">
+                {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{page_path:window.location.pathname});`}
+              </Script>
+            </>
+          )}
+          <Providers>
+            <ClientLayout>{children}</ClientLayout>
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

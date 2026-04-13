@@ -201,7 +201,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
             className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-5 relative">
+            <div className="bg-[#0a2540] px-6 py-5 relative">
               <button
                 onClick={onClose}
                 className="absolute top-3 right-3 w-7 h-7 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
@@ -214,7 +214,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-lg">Download Free Syllabus</h3>
-                  <p className="text-blue-100 text-sm">14-Day Gen AI Program — Complete Roadmap</p>
+                  <p className="text-white/60 text-sm">14-Day Gen AI Program — Complete Roadmap</p>
                 </div>
               </div>
             </div>
@@ -236,7 +236,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Enter your full name"
                         required
-                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all"
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#635bff]/20 focus:border-[#635bff] outline-none transition-all"
                       />
                     </div>
                     <div>
@@ -247,7 +247,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="you@example.com"
                         required
-                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all"
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#635bff]/20 focus:border-[#635bff] outline-none transition-all"
                       />
                     </div>
                     <div>
@@ -263,7 +263,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                         placeholder="10-digit mobile number"
                         required
                         maxLength={10}
-                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 outline-none transition-all"
+                        className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-[#635bff]/20 focus:border-[#635bff] outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -273,7 +273,7 @@ const SyllabusModal = ({ isOpen, onClose }) => {
                   <button
                     type="submit"
                     disabled={sending || !email.trim() || !name.trim() || !phone.trim()}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
+                    className="w-full bg-[#0a2540] hover:bg-[#0d3058] text-white py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
                   >
                     {sending ? (
                       <>
@@ -391,9 +391,9 @@ const AIProgram = () => {
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-8 pb-16">
           {/* Background */}
           <div className="absolute inset-0">
-            <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl" />
+            <div className="absolute top-20 left-20 w-72 h-72 bg-[#635bff]/8 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 right-20 w-96 h-96 bg-[#0a2540]/6 rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#635bff]/5 rounded-full blur-3xl" />
           </div>
 
           <div className="container mx-auto px-6 relative z-10">
@@ -447,8 +447,8 @@ const AIProgram = () => {
                 >
                   <div className="flex -space-x-2">
                     {[
-                      { initials: "PS", bg: "bg-blue-500" },
-                      { initials: "RV", bg: "bg-purple-500" },
+                      { initials: "PS", bg: "bg-[#635bff]" },
+                      { initials: "RV", bg: "bg-[#0a2540]" },
                       { initials: "AR", bg: "bg-green-500" },
                       { initials: "SK", bg: "bg-orange-500" },
                     ].map((u, i) => (
@@ -543,12 +543,12 @@ const AIProgram = () => {
                   className="absolute -right-4 bottom-12 bg-white rounded-xl shadow-lg p-3 border border-gray-100"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Briefcase size={16} className="text-blue-600" />
+                    <div className="w-8 h-8 bg-[#f0effe] rounded-lg flex items-center justify-center">
+                      <Briefcase size={16} className="text-[#635bff]" />
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Job-Ready in</p>
-                      <p className="text-sm font-bold text-blue-600">
+                      <p className="text-sm font-bold text-[#635bff]">
                         14 Days
                       </p>
                     </div>
@@ -575,13 +575,13 @@ const AIProgram = () => {
         {/* ==================== VIRAL AI STATS (FEAR TRIGGER) ==================== */}
         <section className="py-16 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-900 dark:to-gray-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl" />
+            <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#635bff] rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#0a2540] rounded-full blur-3xl" />
           </div>
 
           <div className="container mx-auto px-6 relative z-10">
             <motion.div {...fadeUp} className="text-center mb-12">
-              <p className="text-blue-400 text-sm font-semibold uppercase tracking-wider mb-3">
+              <p className="text-[#7a73ff] text-sm font-semibold uppercase tracking-wider mb-3">
                 The Generative AI Boom Is Here
               </p>
               <h2 className="text-2xl md:text-3xl font-bold">
@@ -600,7 +600,7 @@ const AIProgram = () => {
                   label: "Generative AI market size in 2024",
                   source: "— Statista",
                   icon: BarChart3,
-                  color: "from-blue-500 to-cyan-400",
+                  color: "from-[#635bff] to-[#7a73ff]",
                 },
                 {
                   stat: "72",
@@ -609,7 +609,7 @@ const AIProgram = () => {
                   label: "Organizations now using Gen AI in at least one function",
                   source: "— McKinsey Global Survey 2024",
                   icon: Building2,
-                  color: "from-purple-500 to-pink-400",
+                  color: "from-[#0a2540] to-[#162d4f]",
                 },
                 {
                   stat: "200",
@@ -787,7 +787,7 @@ const AIProgram = () => {
                   company: "Infosys",
                   salary: "₹8.5 LPA",
                   initials: "PS",
-                  bg: "bg-blue-500",
+                  bg: "bg-[#635bff]",
                   quote:
                     "I knew nothing about LLMs or Prompt Engineering. This program taught me to build real Gen AI apps and I cracked my first interview!",
                   rating: 5,
@@ -798,7 +798,7 @@ const AIProgram = () => {
                   company: "TCS",
                   salary: "₹12 LPA",
                   initials: "RV",
-                  bg: "bg-purple-500",
+                  bg: "bg-[#0a2540]",
                   quote:
                     "From a BPO job to automating workflows with ChatGPT APIs. The Gen AI chatbot project on my resume got me 4 interview calls in one week.",
                   rating: 5,
@@ -851,7 +851,7 @@ const AIProgram = () => {
 
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <div className="flex items-center gap-1.5">
-                      <Building2 size={14} className="text-blue-500" />
+                      <Building2 size={14} className="text-[#635bff]" />
                       <span className="text-xs font-medium text-gray-600">
                         {student.company}
                       </span>
@@ -944,7 +944,7 @@ const AIProgram = () => {
                 className="mt-10 text-lg text-gray-600 font-medium"
               >
                 You're not alone —{" "}
-                <span className="text-blue-600 font-semibold">
+                <span className="text-[#635bff] font-semibold">
                   but every day you wait, someone else takes your spot.
                 </span>
               </motion.p>
@@ -953,7 +953,7 @@ const AIProgram = () => {
         </section>
 
         {/* ==================== SOLUTION + IMAGE ==================== */}
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+        <section className="py-20 bg-gradient-to-br from-[#F6F9FC] to-[#f0effe]/30">
           <div className="container mx-auto px-6">
             <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
               <motion.div
@@ -1011,7 +1011,7 @@ const AIProgram = () => {
                     >
                       <item.icon
                         size={20}
-                        className="text-blue-500 mb-2"
+                        className="text-[#635bff] mb-2"
                       />
                       <p className="font-semibold text-sm text-gray-800">
                         {item.title}
@@ -1087,12 +1087,12 @@ const AIProgram = () => {
                   />
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 bg-[#0a2540] rounded-lg flex items-center justify-center flex-shrink-0">
                         <project.icon className="text-white" size={18} />
                       </div>
                       <div>
                         <h3 className="text-base font-bold">{project.title}</h3>
-                        <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-[#635bff] bg-[#f0effe] px-2 py-0.5 rounded-full">
                           {project.label}
                         </span>
                       </div>
@@ -1100,7 +1100,7 @@ const AIProgram = () => {
                     <p className="text-gray-600 text-sm mb-4">{project.desc}</p>
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {project.tools.map((tool) => (
-                        <span key={tool} className="bg-blue-50 text-blue-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                        <span key={tool} className="bg-[#f0effe] text-[#635bff] text-[10px] font-semibold px-2 py-0.5 rounded-full">
                           {tool}
                         </span>
                       ))}
@@ -1128,7 +1128,7 @@ const AIProgram = () => {
               </p>
               <button
                 onClick={() => setSyllabusOpen(true)}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl group"
+                className="inline-flex items-center gap-2 bg-[#0a2540] hover:bg-[#0d3058] text-white px-6 py-3 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl group"
               >
                 <Download size={18} />
                 Download Complete Syllabus PDF — Free
@@ -1141,7 +1141,7 @@ const AIProgram = () => {
               {/* WEEK 1 */}
               <motion.div {...fadeUp} className="mb-4">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-[#0a2540] rounded-xl flex items-center justify-center">
                     <BookOpen size={20} className="text-white" />
                   </div>
                   <div>
@@ -1232,7 +1232,7 @@ const AIProgram = () => {
                       className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap mt-0.5">
+                        <span className="bg-[#0a2540] text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap mt-0.5">
                           {module.day}
                         </span>
                         <div className="flex-1">
@@ -1245,9 +1245,9 @@ const AIProgram = () => {
                               </li>
                             ))}
                           </ul>
-                          <div className="flex items-center gap-1.5 bg-blue-50 rounded-lg px-3 py-1.5 w-fit">
-                            <Award size={12} className="text-blue-600" />
-                            <span className="text-xs font-semibold text-blue-700">Deliverable: {module.deliverable}</span>
+                          <div className="flex items-center gap-1.5 bg-[#f0effe] rounded-lg px-3 py-1.5 w-fit">
+                            <Award size={12} className="text-[#635bff]" />
+                            <span className="text-xs font-semibold text-[#635bff]">Deliverable: {module.deliverable}</span>
                           </div>
                         </div>
                       </div>
@@ -1259,7 +1259,7 @@ const AIProgram = () => {
               {/* WEEK 2 */}
               <motion.div {...fadeUp} className="mt-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-[#635bff] rounded-xl flex items-center justify-center">
                     <Rocket size={20} className="text-white" />
                   </div>
                   <div>
@@ -1350,7 +1350,7 @@ const AIProgram = () => {
                       className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap mt-0.5">
+                        <span className="bg-[#635bff] text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap mt-0.5">
                           {module.day}
                         </span>
                         <div className="flex-1">
@@ -1363,9 +1363,9 @@ const AIProgram = () => {
                               </li>
                             ))}
                           </ul>
-                          <div className="flex items-center gap-1.5 bg-purple-50 rounded-lg px-3 py-1.5 w-fit">
-                            <Award size={12} className="text-purple-600" />
-                            <span className="text-xs font-semibold text-purple-700">Deliverable: {module.deliverable}</span>
+                          <div className="flex items-center gap-1.5 bg-[#f0effe] rounded-lg px-3 py-1.5 w-fit">
+                            <Award size={12} className="text-[#635bff]" />
+                            <span className="text-xs font-semibold text-[#635bff]">Deliverable: {module.deliverable}</span>
                           </div>
                         </div>
                       </div>
@@ -1377,10 +1377,10 @@ const AIProgram = () => {
               {/* Graduation summary */}
               <motion.div
                 {...fadeUp}
-                className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6"
+                className="mt-8 bg-[#f0effe]/40 border border-[#635bff]/20 rounded-xl p-6"
               >
                 <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <GraduationCap size={18} className="text-blue-600" />
+                  <GraduationCap size={18} className="text-[#635bff]" />
                   You Graduate With
                 </h4>
                 <div className="grid sm:grid-cols-2 gap-2">
@@ -1405,7 +1405,7 @@ const AIProgram = () => {
             <motion.div {...fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
               <button
                 onClick={() => setSyllabusOpen(true)}
-                className="flex items-center gap-2 bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-6 py-3.5 rounded-full text-sm font-semibold transition-all shadow-sm hover:shadow-md"
+                className="flex items-center gap-2 bg-white border-2 border-[#635bff] text-[#635bff] hover:bg-[#f0effe] px-6 py-3.5 rounded-full text-sm font-semibold transition-all shadow-sm hover:shadow-md"
               >
                 <Download size={18} />
                 Download Free Syllabus PDF
@@ -1467,8 +1467,8 @@ const AIProgram = () => {
                     transition={{ delay: i * 0.15, duration: 0.5 }}
                     className="bg-white border border-gray-200 rounded-2xl p-8 text-center shadow-sm"
                   >
-                    <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="text-blue-500" size={24} />
+                    <div className="w-12 h-12 bg-[#f0effe] rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <item.icon className="text-[#635bff]" size={24} />
                     </div>
                     <h3 className="text-lg font-bold mb-2">{item.title}</h3>
                     <p className="text-gray-600 text-sm mb-3">{item.desc}</p>
@@ -1480,11 +1480,11 @@ const AIProgram = () => {
               </div>
               <motion.div
                 {...fadeUp}
-                className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6"
+                className="mt-8 bg-[#f0effe]/40 border border-[#635bff]/20 rounded-xl p-6"
               >
                 <p className="text-lg font-semibold text-gray-800">
                   No prior experience required.{" "}
-                  <span className="text-blue-600">
+                  <span className="text-[#635bff]">
                     If you can use a computer, you can learn this.
                   </span>
                 </p>
@@ -1497,7 +1497,7 @@ const AIProgram = () => {
         <section className="py-20 bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-6">
             <motion.div {...fadeUp} className="max-w-lg mx-auto text-center">
-              <div className="bg-white border-2 border-blue-500 rounded-2xl p-10 shadow-lg relative">
+              <div className="bg-white border-2 border-[#635bff] rounded-2xl p-10 shadow-lg relative">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <span className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm font-bold px-5 py-1.5 rounded-full animate-pulse">
                     50% OFF — Ends This Week
@@ -1651,7 +1651,7 @@ const AIProgram = () => {
         </section>
 
         {/* ==================== FINAL CTA ==================== */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-700 relative overflow-hidden">
+        <section className="py-20 bg-[#0a2540] relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute top-10 left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl" />
             <div className="absolute bottom-10 right-10 w-60 h-60 bg-white/5 rounded-full blur-2xl" />
@@ -1669,7 +1669,7 @@ const AIProgram = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                 Your Future Self Will Thank You
               </h2>
-              <p className="text-blue-200 mb-8 max-w-xl mx-auto">
+              <p className="text-white/60 mb-8 max-w-xl mx-auto">
                 Every day you delay, someone else is learning Generative AI and
                 getting the role you deserve. ChatGPT isn't waiting — neither should you.
               </p>
@@ -1692,7 +1692,7 @@ const AIProgram = () => {
                 </Button>
               </a>
 
-              <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-blue-200">
+              <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm text-white/60">
                 {[
                   "Certificate of Completion",
                   "Lifetime Access",

@@ -166,7 +166,7 @@ export default function AdminVideos() {
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>;
+    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#635bff]" /></div>;
   }
 
   if (error) {
@@ -195,7 +195,7 @@ export default function AdminVideos() {
                 accept="video/*"
                 onChange={e => setVideoFile((e.target.files && e.target.files[0]) || null)}
                 disabled={uploading}
-                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 file:mr-3 file:px-3 file:py-1 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-600 file:font-medium"
+                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 file:mr-3 file:px-3 file:py-1 file:rounded-lg file:border-0 file:bg-[#f0effe] file:text-[#635bff] file:font-medium"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -215,7 +215,7 @@ export default function AdminVideos() {
               </div>
               <div className="flex items-end pb-2">
                 <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={uploadForm.isPreview} onChange={e => setUploadForm(f => ({ ...f, isPreview: e.target.checked }))} disabled={uploading} className="w-4 h-4 rounded text-blue-600" />
+                  <input type="checkbox" checked={uploadForm.isPreview} onChange={e => setUploadForm(f => ({ ...f, isPreview: e.target.checked }))} disabled={uploading} className="w-4 h-4 rounded text-[#635bff]" />
                   <span className="text-sm text-gray-700">Free Preview</span>
                 </label>
               </div>
@@ -229,13 +229,13 @@ export default function AdminVideos() {
             {uploading && (
               <div className="space-y-1">
                 <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300 rounded-full" style={{ width: `${uploadProgress}%` }} />
+                  <div className="h-full bg-gradient-to-r from-[#0a2540] to-[#635bff] transition-all duration-300 rounded-full" style={{ width: `${uploadProgress}%` }} />
                 </div>
                 <p className="text-sm text-gray-500 text-center">{uploadProgress}% uploaded</p>
               </div>
             )}
 
-            <button type="submit" disabled={uploading || !videoFile} className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors">
+            <button type="submit" disabled={uploading || !videoFile} className="flex items-center gap-2 px-6 py-2.5 bg-[#0a2540] text-white rounded-xl font-medium hover:bg-[#0d3058] disabled:opacity-50 transition-colors">
               {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</> : <><Upload className="w-4 h-4" /> Upload Video</>}
             </button>
           </form>
@@ -255,10 +255,10 @@ export default function AdminVideos() {
                   <p className="font-medium text-gray-900">{v.title}</p>
                   <p className="text-xs text-gray-400">
                     {v.duration ? `${Math.round(v.duration / 60)} min` : ''}
-                    {v.isPreview && <span className="ml-2 px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-semibold">PREVIEW</span>}
+                    {v.isPreview && <span className="ml-2 px-2 py-0.5 bg-[#f0effe] text-[#635bff] rounded-full text-[10px] font-semibold">PREVIEW</span>}
                   </p>
                 </div>
-                <button onClick={() => openEdit(v)} className="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"><Edit className="w-4 h-4" /></button>
+                <button onClick={() => openEdit(v)} className="p-2 text-[#635bff] bg-[#f0effe] rounded-lg hover:bg-[#f0effe]/70"><Edit className="w-4 h-4" /></button>
                 <button onClick={() => handleDelete(v._id)} className="p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-100"><Trash2 className="w-4 h-4" /></button>
               </div>
             ))}
@@ -290,14 +290,14 @@ export default function AdminVideos() {
                 </div>
               </div>
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={editForm.isPreview} onChange={e => setEditForm(f => ({ ...f, isPreview: e.target.checked }))} className="w-4 h-4 rounded text-blue-600" />
+                <input type="checkbox" checked={editForm.isPreview} onChange={e => setEditForm(f => ({ ...f, isPreview: e.target.checked }))} className="w-4 h-4 rounded text-[#635bff]" />
                 <span className="text-sm text-gray-700">Free Preview</span>
               </label>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea value={editForm.description} onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))} rows={2} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
               </div>
-              <button type="submit" disabled={saving} className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50">
+              <button type="submit" disabled={saving} className="w-full bg-[#0a2540] text-white py-2.5 rounded-xl font-medium hover:bg-[#0d3058] disabled:opacity-50">
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </form>

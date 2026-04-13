@@ -27,10 +27,10 @@ const StickyCourseCTA: React.FC<StickyCourseCTAProps> = () => {
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-xl animate-in slide-in-from-bottom-4 duration-300">
       <div className="flex items-center justify-between gap-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl px-5 py-3.5 shadow-2xl border border-white/10 dark:border-gray-200">
         <div className="flex items-center gap-3 min-w-0">
-          <Sparkles className="h-4 w-4 text-purple-400 dark:text-purple-600 flex-shrink-0" />
+          <Sparkles className="h-4 w-4 text-[#635bff] dark:text-[#7a73ff] flex-shrink-0" />
           <p className="text-sm font-medium truncate">
             Not sure where to start?{' '}
-            <span className="text-blue-300 dark:text-blue-600 hidden sm:inline">
+            <span className="text-[#7a73ff] dark:text-[#635bff] hidden sm:inline">
               Our Gen AI Program has placement support.
             </span>
           </p>
@@ -38,7 +38,7 @@ const StickyCourseCTA: React.FC<StickyCourseCTAProps> = () => {
         <div className="flex items-center gap-2 flex-shrink-0">
           <Link
             href="/ai-program"
-            className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap"
+            className="px-3.5 py-1.5 rounded-lg bg-[#635bff] text-white text-xs font-semibold hover:bg-[#4f46e5] transition-colors whitespace-nowrap"
           >
             Learn More
           </Link>

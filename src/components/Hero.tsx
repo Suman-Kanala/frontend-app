@@ -1,188 +1,139 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import dynamic from "next/dynamic";
+import { ArrowRight, Users } from "lucide-react";
 
-const Tilt = dynamic(() => import("react-parallax-tilt"), { ssr: false });
-
-interface MousePosition {
-  x: number;
-  y: number;
-}
-
-interface HeroProps {
-  // Currently no props needed
-}
-
-const Hero: React.FC<HeroProps> = () => {
-  const router = useRouter();
-  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent): void => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
+const Hero: React.FC = () => {
   const handleGetStarted = () => {
-    const contactElement = document.querySelector("#contact");
-    if (contactElement) {
-      contactElement.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const handleGenAIProgram = () => {
-    router.push("/ai-program");
+    document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-[#060e1d]"
       suppressHydrationWarning
     >
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0" suppressHydrationWarning>
-        <motion.div
-          animate={{
-            x: mousePosition.x * 0.02,
-            y: mousePosition.y * 0.02,
-          }}
-          className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"
-          suppressHydrationWarning
+      {/* Aurora gradient orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div
+          className="hero-orb-1 absolute -top-48 -left-48 w-[800px] h-[800px] rounded-full"
+          style={{ background: 'radial-gradient(circle at 40% 40%, rgba(99,91,255,0.13) 0%, transparent 65%)' }}
         />
-        <motion.div
-          animate={{
-            x: mousePosition.x * -0.02,
-            y: mousePosition.y * -0.02,
-          }}
-          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
-          suppressHydrationWarning
+        <div
+          className="hero-orb-2 absolute -bottom-48 -right-32 w-[700px] h-[700px] rounded-full"
+          style={{ background: 'radial-gradient(circle at 60% 60%, rgba(0,212,255,0.09) 0%, transparent 65%)' }}
         />
-        <motion.div
-          animate={{
-            x: mousePosition.x * 0.01,
-            y: mousePosition.y * 0.01,
-          }}
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"
-          suppressHydrationWarning
+        <div
+          className="hero-orb-3 absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,61,113,0.06) 0%, transparent 65%)' }}
         />
       </div>
 
-      {/* 3D Tilt effect on main hero content */}
-      <Tilt
-        glareEnable={true}
-        glareMaxOpacity={0.2}
-        glareColor="#5050ff"
-        glarePosition="all"
-        scale={1.04}
-        perspective={1200}
-        className="container mx-auto px-6 text-center relative z-10"
-        tiltMaxAngleX={15}
-        tiltMaxAngleY={15}
-        glareBorderRadius="32px"
-      >
+      {/* Dot grid */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(99,91,255,0.18) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+          opacity: 0.22,
+        }}
+      />
+
+      <div className="max-w-5xl mx-auto px-6 relative z-10 text-center pt-24 pb-20">
+
+        {/* Pill badge */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          suppressHydrationWarning
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.5 }}
+          className="flex justify-center mb-8"
         >
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight"
-          >
-            <span className="gradient-text">Careers Connected</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-10 max-w-3xl mx-auto"
-          >
-            Bridging talent with opportunities across IT, Engineering,
-            Healthcare, and Finance sectors globally. Your next career move
-            starts here.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="flex justify-center items-center gap-4 mb-12 flex-wrap"
-          >
-            <Button
-              onClick={handleGetStarted}
-              size="lg"
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-10 py-6 rounded-full text-xl font-semibold group shadow-lg hover:shadow-xl transition-shadow"
-            >
-              Get Started
-              <ArrowRight
-                className="ml-3 group-hover:translate-x-1 transition-transform"
-                size={24}
-              />
-            </Button>
-            <Button
-              onClick={handleGenAIProgram}
-              size="lg"
-              className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-10 py-6 rounded-full text-xl font-semibold group shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <Sparkles className="mr-3 group-hover:rotate-12 transition-transform" size={24} />
-              Gen AI Program
-            </Button>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto"
-          >
-            {[
-              { number: "10K+", label: "Jobs Placed" },
-              { number: "500+", label: "Companies" },
-              { number: "6", label: "Regions" },
-              { number: "95%", label: "Success Rate" },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-lg p-4 shadow-sm"
-              >
-                <div className="text-3xl md:text-4xl font-bold gradient-text">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 dark:text-gray-400 text-sm font-medium">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          <span className="inline-flex items-center gap-2 bg-[#f0effe] dark:bg-[#635bff]/15 text-[#635bff] px-4 py-1.5 rounded-full text-sm font-semibold border border-[#635bff]/20">
+            Trusted by 500+ companies worldwide
+          </span>
         </motion.div>
-      </Tilt>
 
-      {/* Floating Elements */}
-      <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-32 left-10 w-16 h-16 bg-blue-500/10 rounded-full hidden lg:block"
-      />
-      <motion.div
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute bottom-32 right-10 w-20 h-20 bg-purple-500/10 rounded-full hidden lg:block"
-      />
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+          className="text-6xl md:text-7xl lg:text-[88px] font-extrabold tracking-tight text-[#0a2540] dark:text-white leading-[1.03] mb-6"
+        >
+          Careers
+          <span className="block bg-gradient-to-r from-[#635bff] via-[#7a73ff] to-[#0a2540] dark:to-[#a5a0ff] bg-clip-text text-transparent">
+            Connected.
+          </span>
+        </motion.h1>
+
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.7 }}
+          className="text-lg md:text-xl text-[#425466] dark:text-[#8898aa] max-w-[520px] mx-auto mb-10 leading-relaxed"
+        >
+          Bridging exceptional talent with transformative opportunities across IT, Engineering, Healthcare, and Finance — globally.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="flex flex-col sm:flex-row justify-center items-center gap-3 mb-14"
+        >
+          <button
+            onClick={handleGetStarted}
+            className="inline-flex items-center gap-2.5 bg-[#635bff] hover:bg-[#4f46e5] text-white px-8 py-3.5 rounded-full text-base font-semibold shadow-lg shadow-[#635bff]/25 hover:shadow-[#635bff]/40 hover:-translate-y-0.5 transition-all duration-200 group"
+          >
+            Get Started Free
+            <ArrowRight size={17} className="group-hover:translate-x-0.5 transition-transform" />
+          </button>
+          <button
+            onClick={() => document.querySelector("#how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+            className="inline-flex items-center gap-2.5 bg-white dark:bg-white/5 hover:bg-[#F6F9FC] dark:hover:bg-white/10 text-[#0a2540] dark:text-white px-8 py-3.5 rounded-full text-base font-semibold border border-[#E6EBF1] dark:border-white/10 hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <Users size={17} className="text-[#635bff]" />
+            How it works
+          </button>
+        </motion.div>
+
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.6 }}
+          className="flex flex-wrap justify-center items-center gap-0 divide-x divide-[#E6EBF1] dark:divide-white/[0.08]"
+        >
+          {[
+            { number: "3,200+", label: "Jobs Placed" },
+            { number: "500+",   label: "Companies" },
+            { number: "6",      label: "Global Regions" },
+            { number: "97%",    label: "Success Rate" },
+          ].map((stat, i) => (
+            <div key={i} className="text-center px-7 py-2">
+              <div className="text-2xl md:text-3xl font-extrabold text-[#0a2540] dark:text-white tracking-tight">
+                {stat.number}
+              </div>
+              <div className="text-xs text-[#697386] dark:text-[#8898aa] mt-0.5 font-medium uppercase tracking-wide">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Section fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none dark:hidden"
+        style={{ background: 'linear-gradient(to bottom, transparent, #ffffff)' }} />
+      <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none hidden dark:block"
+        style={{ background: 'linear-gradient(to bottom, transparent, #07101d)' }} />
     </section>
   );
 };

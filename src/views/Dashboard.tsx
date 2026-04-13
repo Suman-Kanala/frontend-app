@@ -46,8 +46,8 @@ function Spinner() {
   return (
     <div className="flex items-center justify-center py-32">
       <div className="relative h-14 w-14">
-        <div className="absolute inset-0 rounded-full border-4 border-blue-200" />
-        <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-blue-600" />
+        <div className="absolute inset-0 rounded-full border-4 border-[#635bff]/20" />
+        <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-[#635bff]" />
       </div>
     </div>
   );
@@ -57,7 +57,7 @@ function Spinner() {
 function EmptyState({ icon: Icon, title, subtitle }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white/60 py-16 text-center backdrop-blur">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-purple-100">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#f0effe] dark:bg-[#635bff]/15/40">
         <Icon className="h-8 w-8 text-blue-500" />
       </div>
       <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
@@ -94,7 +94,7 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-blue-50/40">
         <div className="text-center px-6">
           <p className="text-red-500 text-lg font-medium mb-4">{getErrorMessage(error, "Failed to load dashboard data")}</p>
           <button onClick={() => window.location.reload()} className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Try Again</button>
@@ -117,7 +117,7 @@ export default function Dashboard() {
                 className="h-16 w-16 rounded-full object-cover border border-gray-200 dark:border-gray-700"
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-xl font-bold text-white">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#0a2540] text-xl font-bold text-white">
                 {user?.name?.charAt(0)?.toUpperCase() || "U"}
               </div>
             )}
@@ -148,8 +148,8 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Enrolled Courses</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{enrollments.length}</p>
               </div>
-              <div className="h-12 w-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="h-12 w-12 bg-[#f0effe] dark:bg-[#635bff]/15 rounded-lg flex items-center justify-center">
+                <BookOpen className="h-6 w-6 text-[#635bff] dark:text-[#7a73ff]" />
               </div>
             </div>
           </motion.div>
@@ -163,8 +163,8 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Transactions</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{payments.length}</p>
               </div>
-              <div className="h-12 w-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                <Clock className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="h-12 w-12 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center">
+                <Clock className="h-6 w-6 text-slate-600 dark:text-slate-400" />
               </div>
             </div>
           </motion.div>
@@ -229,7 +229,7 @@ export default function Dashboard() {
                           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
+                        <div className="flex h-full w-full items-center justify-center bg-[#f0effe] dark:bg-[#635bff]/10">
                           <BookOpen className="h-8 w-8 text-gray-400 dark:text-gray-600" />
                         </div>
                       )}
@@ -252,7 +252,7 @@ export default function Dashboard() {
                         </div>
                         <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                           <div
-                            className="h-full bg-blue-600 dark:bg-blue-500 transition-all duration-700"
+                            className="h-full bg-[#635bff] dark:bg-[#7a73ff] transition-all duration-700"
                             style={{ width: `${percent}%` }}
                           />
                         </div>
@@ -263,7 +263,7 @@ export default function Dashboard() {
                           e.stopPropagation();
                           router.push(`/courses/${course.slug || course._id || ""}`);
                         }}
-                        className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 px-3 py-2 text-sm font-semibold text-white transition-colors"
+                        className="w-full rounded-lg bg-[#0a2540] hover:bg-[#0d3058] dark:bg-blue-600 dark:hover:bg-blue-700 px-3 py-2 text-sm font-semibold text-white transition-colors"
                       >
                         {percent >= 100 ? "Review Course" : "Continue Learning"}
                       </button>
@@ -387,7 +387,7 @@ export default function Dashboard() {
         <motion.div {...fadeUp} className="text-center">
           <button
             onClick={() => router.push("/courses")}
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 px-8 py-3 text-base font-semibold text-white transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#0a2540] hover:bg-[#0d3058] dark:bg-blue-600 dark:hover:bg-blue-700 px-8 py-3 text-base font-semibold text-white transition-colors"
           >
             <BookOpen className="h-5 w-5" />
             Browse More Courses

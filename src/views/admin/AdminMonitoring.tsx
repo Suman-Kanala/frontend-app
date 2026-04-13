@@ -48,7 +48,7 @@ export default function AdminMonitoring() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-[#635bff] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -75,8 +75,8 @@ export default function AdminMonitoring() {
       {
         label: 'CPU Usage (%)',
         data: metrics?.history?.cpu || [],
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: 'rgb(99, 91, 255)',
+        backgroundColor: 'rgba(99, 91, 255, 0.1)',
         fill: true,
         tension: 0.4,
       },
@@ -116,7 +116,7 @@ export default function AdminMonitoring() {
           className="mb-8"
         >
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-            <Activity className="w-8 h-8 text-blue-600" />
+            <Activity className="w-8 h-8 text-[#635bff]" />
             System Monitoring
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
@@ -256,10 +256,10 @@ export default function AdminMonitoring() {
 
 function StatusCard({ title, value, icon, color, status, subtitle }: { title: any; value: any; icon: any; color: any; status?: any; subtitle?: any }): JSX.Element {
   const colors = {
-    blue: 'bg-blue-500',
+    blue: 'bg-[#635bff]',
     green: 'bg-green-500',
-    purple: 'bg-purple-500',
-    indigo: 'bg-indigo-500',
+    purple: 'bg-[#635bff]',
+    indigo: 'bg-[#0a2540]',
   };
 
   const statusColors = {

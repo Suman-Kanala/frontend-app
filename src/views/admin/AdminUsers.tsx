@@ -42,7 +42,7 @@ export default function AdminUsers() {
 
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden">
           {loading ? (
-            <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>
+            <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-[#635bff]" /></div>
           ) : error ? (
             <div className="flex justify-center py-20 text-red-500">{getErrorMessage(error, 'Failed to load users')}</div>
           ) : (
@@ -65,7 +65,7 @@ export default function AdminUsers() {
                           {u.picture ? (
                             <img src={u.picture} alt="" className="w-8 h-8 rounded-full object-cover" />
                           ) : (
-                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm">
+                            <div className="w-8 h-8 rounded-full bg-[#f0effe] flex items-center justify-center text-[#635bff] font-bold text-sm">
                               {u.name?.charAt(0)?.toUpperCase() || 'U'}
                             </div>
                           )}
@@ -74,7 +74,7 @@ export default function AdminUsers() {
                       </td>
                       <td className="px-5 py-3 text-gray-500 dark:text-gray-400">{u.email}</td>
                       <td className="px-5 py-3">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'instructor' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${u.role === 'admin' ? 'bg-[#f0effe] text-[#635bff]' : u.role === 'instructor' ? 'bg-[#f0effe] text-[#635bff]' : 'bg-gray-100 text-gray-600'}`}>
                           {u.role === 'admin' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
                           {u.role}
                         </span>

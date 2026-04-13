@@ -1,163 +1,154 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { Zap, ExternalLink, RefreshCw, Newspaper } from "lucide-react";
-import { useGetNewsQuery } from "@/store/api/appApi";
+import React, { useState, useEffect } from 'react';
+import { Briefcase, ExternalLink, RefreshCw, MapPin } from 'lucide-react';
 
-interface NewsItem {
+interface JobItem {
+  id: string;
   title: string;
-  link: string;
-  source: string;
-  pubDate?: string;
+  company: string;
+  location: string;
+  url: string;
+  type: string;
 }
 
-interface NewsTickerProps {
-  // Currently no props needed
-}
+const NewsTicker: React.FC = () => {
+  const [jobs, setJobs]         = useState<JobItem[]>([]);
+  const [isLoading, setLoading] = useState(true);
+  const [isError, setError]     = useState(false);
+  const [paused, setPaused]     = useState(false);
 
-const NewsTicker: React.FC<NewsTickerProps> = () => {
-  const [paused, setPaused] = useState<boolean>(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const {
-    data: news = [],
-    isLoading: loading,
-    isError: error,
-    refetch,
-  } = useGetNewsQuery(undefined, {
-    pollingInterval: 6 * 60 * 60 * 1000,
-  });
-
-  // Auto-scroll effect
-  useEffect(() => {
-    if (!scrollRef.current || news.length === 0 || paused) return;
-
-    const el = scrollRef.current;
-    let animId: number;
-    let lastTime = 0;
-    const speed = 0.5; // pixels per frame (~30px/sec)
-
-    const scroll = (timestamp: number): void => {
-      if (!lastTime) lastTime = timestamp;
-      const delta = timestamp - lastTime;
-      lastTime = timestamp;
-
-      if (delta < 100) { // skip large jumps (tab switch)
-        el.scrollTop += speed;
-      }
-
-      // Loop back to top when reaching end
-      if (el.scrollTop >= el.scrollHeight - el.clientHeight - 1) {
-        el.scrollTop = 0;
-      }
-
-      animId = requestAnimationFrame(scroll);
-    };
-
-    animId = requestAnimationFrame(scroll);
-    return () => cancelAnimationFrame(animId);
-  }, [news, paused]);
-
-  const timeAgo = (dateStr?: string): string => {
-    if (!dateStr) return "";
-    const diff = Date.now() - new Date(dateStr).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 60) return `${mins}m ago`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
-    const days = Math.floor(hrs / 24);
-    return `${days}d ago`;
+  const load = async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch('/api/jobs', { next: { revalidate: 3600 } } as RequestInit);
+      if (!res.ok) throw new Error('Failed');
+      const data: JobItem[] = await res.json();
+      if (!Array.isArray(data) || data.length === 0) throw new Error('Empty');
+      setJobs(data);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (loading) {
+  useEffect(() => {
+    load();
+  }, []);
+
+  /* ── Loading skeleton ─────────────────────────────────────────────────── */
+  if (isLoading) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200/80 dark:border-gray-800 p-5 shadow-sm h-[260px]">
-        <div className="flex items-center gap-2 mb-4">
-          <Newspaper size={16} className="text-blue-500" />
-          <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">Tech & Jobs News</h3>
+      <div className="bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-2xl px-5 py-4 flex items-center gap-4 overflow-hidden">
+        <div className="flex items-center gap-2 flex-shrink-0 bg-[#0a2540] rounded-xl px-3 py-2">
+          <span className="w-1.5 h-1.5 bg-[#635bff] rounded-full animate-pulse" />
+          <span className="text-xs font-bold text-white uppercase tracking-[0.12em]">Live Jobs</span>
         </div>
-        <div className="space-y-4">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-3 bg-gray-100 dark:bg-gray-800 rounded w-full mb-1.5" />
-              <div className="h-2.5 bg-gray-50 dark:bg-gray-900 rounded w-1/3" />
-            </div>
-          ))}
-        </div>
+        <div className="h-3 flex-1 bg-[#E6EBF1] dark:bg-white/[0.06] rounded animate-pulse" />
+        <div className="h-3 w-24 bg-[#E6EBF1] dark:bg-white/[0.06] rounded animate-pulse flex-shrink-0" />
       </div>
     );
   }
 
-  if (error || news.length === 0) {
+  /* ── Error state ──────────────────────────────────────────────────────── */
+  if (isError || jobs.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200/80 dark:border-gray-800 p-5 shadow-sm h-[260px]">
-        <div className="flex items-center gap-2 mb-3">
-          <Newspaper size={16} className="text-blue-500" />
-          <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">Tech & Jobs News</h3>
+      <div className="bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-2xl px-5 py-4 flex items-center gap-4">
+        <div className="flex items-center gap-2 bg-[#0a2540] rounded-xl px-3 py-2 flex-shrink-0">
+          <Briefcase size={12} className="text-[#635bff]" />
+          <span className="text-xs font-bold text-white uppercase tracking-[0.12em]">Live Jobs</span>
         </div>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mb-3">Unable to load news. Make sure the server is running.</p>
+        <span className="text-xs text-[#697386] dark:text-[#8898aa] flex-1">Unable to load live jobs.</span>
         <button
-          onClick={refetch}
-          className="text-xs text-blue-500 hover:text-blue-600 flex items-center gap-1 font-medium"
+          onClick={load}
+          className="text-xs text-[#635bff] flex items-center gap-1 font-semibold flex-shrink-0 hover:text-[#4f46e5] transition-colors"
         >
-          <RefreshCw size={12} />
-          Retry
+          <RefreshCw size={11} /> Retry
         </button>
       </div>
     );
   }
 
+  /* ── Double the items for seamless loop ───────────────────────────────── */
+  const tickerItems = [...jobs, ...jobs];
+
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200/80 dark:border-gray-800 p-5 shadow-sm h-[260px] flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-blue-50 dark:bg-blue-950/50 rounded-lg flex items-center justify-center">
-            <Zap size={14} className="text-blue-500" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-gray-800 dark:text-gray-100">Live Tech & Jobs News</h3>
-            <p className="text-[10px] text-gray-400 dark:text-gray-500">Auto-updates every 6 hours</p>
-          </div>
-        </div>
-        <span className="flex items-center gap-1 text-[10px] text-green-500 font-medium">
-          <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-          Live
+    <div
+      className="bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-2xl flex items-stretch overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* ── Label pill ─────────────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 px-4 py-3.5 bg-[#0a2540] flex-shrink-0">
+        <span className="w-1.5 h-1.5 bg-[#635bff] rounded-full animate-pulse flex-shrink-0" />
+        <span className="text-xs font-bold text-white uppercase tracking-[0.12em] whitespace-nowrap">
+          Live Jobs
         </span>
       </div>
 
-      {/* Auto-scrolling news list */}
-      <div
-        ref={scrollRef}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        className="flex-1 overflow-hidden relative"
-      >
-        {news.map((item: NewsItem, i: number) => (
-          <a
-            key={`${item.link}-${i}`}
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-start gap-2 py-2 border-b border-gray-50 dark:border-gray-800 last:border-0 group hover:bg-gray-50/50 dark:hover:bg-gray-800/50 px-1 rounded transition-colors"
-          >
-            <span className="w-1 h-1 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-700 dark:text-gray-300 font-medium leading-snug line-clamp-2 group-hover:text-blue-600 transition-colors">
-                {item.title}
-              </p>
-              <div className="flex items-center gap-1.5 mt-1">
-                <span className="text-[10px] text-blue-500 font-medium">{item.source}</span>
-                {item.pubDate && (
-                  <>
-                    <span className="text-[10px] text-gray-300 dark:text-gray-600">·</span>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500">{timeAgo(item.pubDate)}</span>
-                  </>
-                )}
-              </div>
-            </div>
-            <ExternalLink size={10} className="text-gray-300 dark:text-gray-600 group-hover:text-blue-400 mt-1 flex-shrink-0 transition-colors" />
-          </a>
-        ))}
+      {/* ── Scrolling strip ────────────────────────────────────────────── */}
+      <div className="flex-1 overflow-hidden relative">
+
+        {/* Fade edges — light */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none dark:hidden"
+          style={{ background: 'linear-gradient(to right, white, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none dark:hidden"
+          style={{ background: 'linear-gradient(to left, white, transparent)' }} />
+        {/* Fade edges — dark */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none hidden dark:block"
+          style={{ background: 'linear-gradient(to right, #0d1f33, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none hidden dark:block"
+          style={{ background: 'linear-gradient(to left, #0d1f33, transparent)' }} />
+
+        <div
+          className="flex items-center h-full"
+          style={{ animation: paused ? 'none' : 'scroll-marquee 80s linear infinite' }}
+        >
+          {tickerItems.map((job, i) => (
+            <a
+              key={`${job.id}-${i}`}
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-5 py-3.5 flex-shrink-0 group border-r border-[#E6EBF1] dark:border-white/[0.05] last:border-0"
+            >
+              {/* Job type badge */}
+              <span className="text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-[#635bff]/10 text-[#635bff] whitespace-nowrap flex-shrink-0">
+                {job.type}
+              </span>
+
+              {/* Title */}
+              <span className="text-xs font-semibold text-[#0a2540] dark:text-white group-hover:text-[#635bff] transition-colors whitespace-nowrap max-w-[200px] truncate">
+                {job.title}
+              </span>
+
+              {/* Separator */}
+              <span className="w-1 h-1 rounded-full bg-[#635bff]/30 flex-shrink-0" />
+
+              {/* Company */}
+              <span className="text-xs text-[#425466] dark:text-[#8898aa] whitespace-nowrap flex-shrink-0 font-medium">
+                {job.company}
+              </span>
+
+              {/* Location */}
+              {job.location && (
+                <>
+                  <MapPin size={10} className="text-[#697386] dark:text-white/20 flex-shrink-0" />
+                  <span className="text-[11px] text-[#697386] dark:text-[#8898aa] whitespace-nowrap flex-shrink-0 max-w-[120px] truncate">
+                    {job.location}
+                  </span>
+                </>
+              )}
+
+              <ExternalLink
+                size={10}
+                className="text-[#E6EBF1] dark:text-white/20 group-hover:text-[#635bff]/60 flex-shrink-0 transition-colors ml-0.5"
+              />
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );

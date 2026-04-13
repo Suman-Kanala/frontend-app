@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Saanvi Careers - Careers Connected',
     description:
-      'Professional employment services and LMS platform. Learn Gen AI, get interview support, and land your dream job.',
+      'Saanvi Careers connects top talent with transformative opportunities across IT, Engineering, Healthcare, and Finance — globally.',
     type: 'website',
     url: 'https://saanvicareers.com',
   },

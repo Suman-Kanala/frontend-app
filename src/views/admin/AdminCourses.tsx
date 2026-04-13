@@ -101,13 +101,13 @@ export default function AdminCourses() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Course Management</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">Create and manage courses</p>
           </div>
-          <button onClick={openCreate} className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+          <button onClick={openCreate} className="flex items-center gap-2 px-5 py-2.5 bg-[#0a2540] hover:bg-[#0d3058] dark:bg-[#0a2540] dark:hover:bg-[#0d3058] text-white rounded-lg font-medium transition-colors">
             <Plus className="w-5 h-5" /> Create Course
           </button>
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400" /></div>
+          <div className="flex justify-center py-24"><Loader2 className="w-8 h-8 animate-spin text-[#635bff] dark:text-[#7a73ff]" /></div>
         ) : error ? (
           <div className="text-center py-24 border border-dashed border-red-300 dark:border-red-700 rounded-xl bg-red-50/50 dark:bg-red-900/10 text-red-500">
             {getErrorMessage(error, 'Failed to load courses')}
@@ -125,7 +125,7 @@ export default function AdminCourses() {
                   {c.thumbnail ? (
                     <img src={c.thumbnail} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900" />
+                    <div className="w-full h-full bg-gradient-to-br from-[#0a2540] to-[#635bff] dark:from-[#0a2540] dark:to-[#635bff]" />
                   )}
                 </div>
 
@@ -142,13 +142,13 @@ export default function AdminCourses() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 flex-wrap">
-                  <button onClick={() => router.push(`/admin/courses/${c._id}/videos`)} className="flex items-center gap-1 px-3 py-1.5 text-sm bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors">
+                  <button onClick={() => router.push(`/admin/courses/${c._id}/videos`)} className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[#f0effe] dark:bg-[#f0effe]/10 text-[#635bff] dark:text-[#7a73ff] rounded-lg hover:bg-[#f0effe]/70 dark:hover:bg-[#f0effe]/20 transition-colors">
                     <Video className="w-4 h-4" /> Videos
                   </button>
                   <button onClick={() => togglePublish(c)} className={`p-2 rounded-lg transition-colors ${c.isPublished ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30' : 'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'}`} title={c.isPublished ? 'Unpublish' : 'Publish'}>
                     {c.isPublished ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                   </button>
-                  <button onClick={() => openEdit(c)} className="p-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                  <button onClick={() => openEdit(c)} className="p-2 text-[#635bff] dark:text-[#7a73ff] bg-[#f0effe] dark:bg-[#f0effe]/10 rounded-lg hover:bg-[#f0effe]/70 dark:hover:bg-[#f0effe]/20 transition-colors">
                     <Edit className="w-4 h-4" />
                   </button>
                   <button onClick={() => handleDelete(c._id)} disabled={deleting === c._id} className="p-2 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors">
@@ -173,7 +173,7 @@ export default function AdminCourses() {
             <form onSubmit={handleSave} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">Title *</label>
-                <input value={form.title} onChange={e => setField('title', e.target.value)} required className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <input value={form.title} onChange={e => setField('title', e.target.value)} required className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#635bff] focus:border-transparent" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">Slug</label>
@@ -181,7 +181,7 @@ export default function AdminCourses() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">Description</label>
-                <textarea value={form.description} onChange={e => setField('description', e.target.value)} rows={4} className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                <textarea value={form.description} onChange={e => setField('description', e.target.value)} rows={4} className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#635bff] focus:border-transparent" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -201,7 +201,7 @@ export default function AdminCourses() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail URL</label>
                 <input value={form.thumbnail} onChange={e => setField('thumbnail', e.target.value)} className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
               </div>
-              <button type="submit" disabled={saving} className="w-full bg-blue-600 text-white py-2.5 rounded-xl font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors">
+              <button type="submit" disabled={saving} className="w-full bg-[#0a2540] text-white py-2.5 rounded-xl font-medium hover:bg-[#0d3058] disabled:opacity-50 transition-colors">
                 {saving ? 'Saving...' : editId ? 'Update Course' : 'Create Course'}
               </button>
             </form>

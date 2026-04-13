@@ -11,9 +11,9 @@ interface CoursesTopicsSectionProps {
 }
 
 const categoryColors: CategoryColors = {
-  Roadmap: 'bg-blue-50 text-blue-700 border-blue-200',
+  Roadmap: 'bg-[#f0effe] text-[#635bff] border-[#635bff]/20',
   Tutorial: 'bg-green-50 text-green-700 border-green-200',
-  Career: 'bg-purple-50 text-purple-700 border-purple-200',
+  Career: 'bg-[#f0effe] text-[#0a2540] border-[#0a2540]/20',
   'AI & Career': 'bg-orange-50 text-orange-700 border-orange-200',
 };
 
@@ -35,7 +35,7 @@ const CoursesTopicsSection: React.FC<CoursesTopicsSectionProps> = () => {
             <Link
               key={topic.slug}
               href={`/learn/${topic.slug}`}
-              className="group block p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-sm transition-all"
+              className="group block p-5 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-[#635bff]/40 dark:hover:border-[#635bff]/40 hover:shadow-sm transition-all"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${categoryColors[topic.category] || 'bg-gray-100 text-gray-600 border-gray-200'}`}>
@@ -43,7 +43,7 @@ const CoursesTopicsSection: React.FC<CoursesTopicsSectionProps> = () => {
                 </span>
                 <span className="text-xs text-gray-400">{topic.readTime}</span>
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-[#635bff] dark:group-hover:text-[#7a73ff] transition-colors line-clamp-2">
                 {topic.headline}
               </h3>
               <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">

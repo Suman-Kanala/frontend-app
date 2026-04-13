@@ -1,323 +1,189 @@
 'use client';
 
-import React, { useRef } from "react";
-import {
-  Star,
-  Quote,
-  MapPin,
-  Building2,
-  Award,
-  TrendingUp,
-} from "lucide-react";
+import React, { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { Star, Quote } from 'lucide-react';
 
-interface Testimonial {
-  name: string;
-  role: string;
-  company: string;
-  location: string;
-  rating: number;
-  text: string;
-  salaryIncrease: string;
+const testimonials = [
+  { name: 'Priya Sharma',  role: 'Senior Software Engineer', company: 'Google India',       rating: 5, text: 'Saanvi Careers transformed my job search. Role-specific coaching — not generic tips — made a real difference. Placed within 3 weeks.', avatar: '635bff' },
+  { name: 'Rajesh Kumar',  role: 'Data Science Manager',     company: 'Amazon',             rating: 4, text: "They understood the Indian tech market and connected me with opportunities I wouldn't have found on my own. The outcome was exceptional.", avatar: '0a2540' },
+  { name: 'Arjun Patel',   role: 'Investment Banking VP',    company: 'Goldman Sachs',      rating: 5, text: 'They actually listened. Sent 4 pre-vetted roles — all relevant, all realistic. Ended up at Goldman after two rounds. Zero time wasted.', avatar: 'f59e0b' },
+  { name: 'Anita Desai',   role: 'Consulting Director',      company: 'McKinsey & Company', rating: 5, text: 'The coaching was worth every minute. My consultant had interviewed at McKinsey-tier firms himself — the advice was anything but theoretical.', avatar: '10b981' },
+  { name: 'Vikram Reddy',  role: 'Full Stack Developer',     company: 'Flipkart',           rating: 4, text: 'As a fresh grad I had no idea how to navigate the market. They fixed my resume, prepped me for technical rounds, and helped negotiate my first offer.', avatar: 'e84393' },
+  { name: 'Sneha Iyer',    role: 'Cloud Architect',          company: 'TCS',                rating: 5, text: 'Mid-level backend to senior cloud architect in under 6 weeks. They knew exactly which unit was hiring and what the panel looked for.', avatar: '3b82f6' },
+];
+
+const companyLogos = [
+  { name: 'TCS',           src: '/logos/tcs.svg'          },
+  { name: 'Infosys',       src: '/logos/infosys.svg'      },
+  { name: 'Wipro',         src: '/logos/wipro.svg'        },
+  { name: 'HCLTech',       src: '/logos/hcltech.svg'      },
+  { name: 'Google',        src: '/logos/google.svg'       },
+  { name: 'Microsoft',     src: '/logos/microsoft.png'    },
+  { name: 'Amazon',        src: '/logos/amazon.png'       },
+  { name: 'Flipkart',      src: '/logos/flipkart.png'     },
+  { name: 'Goldman Sachs', src: '/logos/goldmansachs.svg' },
+  { name: 'Deloitte',      src: '/logos/deloitte.png'     },
+  { name: 'Accenture',     src: '/logos/accenture.svg'    },
+  { name: 'IBM',           src: '/logos/ibm.png'          },
+  { name: 'Meta',          src: '/logos/meta.svg'         },
+  { name: 'Razorpay',      src: '/logos/razorpay.svg'     },
+  { name: 'Zoho',          src: '/logos/zoho.svg'         },
+  { name: 'Zomato',        src: '/logos/zomato.svg'       },
+];
+
+function Stars({ n }: { n: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} size={11} className={i < n ? 'text-amber-400 fill-amber-400' : 'text-[#E6EBF1] dark:text-white/10'} />
+      ))}
+    </div>
+  );
 }
 
-interface CompanyLogo {
-  name: string;
-  logo: string;
+function Card({ t }: { t: typeof testimonials[number] }) {
+  return (
+    <div className="w-[315px] flex-shrink-0 bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-2xl p-5 flex flex-col gap-3 select-none">
+      <div className="flex items-center justify-between">
+        <Stars n={t.rating} />
+        <Quote size={14} className="text-[#E6EBF1] dark:text-white/10" />
+      </div>
+      <p className="text-sm text-[#425466] dark:text-[#8898aa] leading-relaxed flex-1">
+        "{t.text}"
+      </p>
+      <div className="flex items-center gap-2.5 pt-3 border-t border-[#E6EBF1] dark:border-white/[0.06]">
+        <img
+          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${t.avatar}&color=ffffff&size=64`}
+          alt={t.name}
+          className="w-8 h-8 rounded-full flex-shrink-0"
+        />
+        <div className="min-w-0">
+          <p className="text-xs font-bold text-[#0a2540] dark:text-white truncate">{t.name}</p>
+          <p className="text-[10px] text-[#697386] truncate">{t.role} · {t.company}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-interface TestimonialsProps {
-  // Currently no props needed
-}
+const row1 = testimonials.slice(0, 3);
+const row2 = testimonials.slice(3);
 
-const Testimonials: React.FC<TestimonialsProps> = () => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const testimonials: Testimonial[] = [
-    {
-      name: "Priya Sharma",
-      role: "Senior Software Engineer",
-      company: "Google India",
-      location: "Bengaluru, India",
-      rating: 5,
-      text: "Saanvi Careers helped me transition from a startup to Google. Their technical interview preparation and salary negotiation guidance were invaluable.",
-      salaryIncrease: "65%",
-    },
-    {
-      name: "Rajesh Kumar",
-      role: "Data Science Manager",
-      company: "Amazon",
-      location: "Hyderabad, India",
-      rating: 4,
-      text: "Professional approach and deep understanding of the Indian tech market. They connected me with the right opportunities at the right time.",
-      salaryIncrease: "38%",
-    },
-    {
-      name: "Arjun Patel",
-      role: "Investment Banking VP",
-      company: "Goldman Sachs",
-      location: "Mumbai, India",
-      rating: 5,
-      text: "Exceptional market knowledge and network. They understood my career aspirations and delivered beyond expectations with perfect role matching.",
-      salaryIncrease: "55%",
-    },
-    {
-      name: "Anita Desai",
-      role: "Consulting Director",
-      company: "McKinsey & Company",
-      location: "Delhi, India",
-      rating: 5,
-      text: "Their strategic approach to career development and understanding of consulting industry dynamics helped me achieve partner track success.",
-      salaryIncrease: "71%",
-    },
-    {
-      name: "Vikram Reddy",
-      role: "Full Stack Developer",
-      company: "Flipkart",
-      location: "Bengaluru, India",
-      rating: 5,
-      text: "As a fresher, I was struggling to break into top tech companies. Saanvi Careers prepared me with mock interviews and resume tips that landed me my dream role.",
-      salaryIncrease: "52%",
-    },
-    {
-      name: "Sneha Iyer",
-      role: "Cloud Architect",
-      company: "TCS",
-      location: "Chennai, India",
-      rating: 5,
-      text: "Their understanding of the Indian IT services landscape is outstanding. Helped me move from a mid-level role to a senior architect position seamlessly.",
-      salaryIncrease: "44%",
-    },
-    {
-      name: "Rohit Mehra",
-      role: "Product Lead",
-      company: "Razorpay",
-      location: "Bengaluru, India",
-      rating: 4,
-      text: "Saanvi Careers understands the startup ecosystem very well. They matched me with a role that aligned perfectly with my skills and growth goals.",
-      salaryIncrease: "60%",
-    },
-    {
-      name: "Deepa Nair",
-      role: "AI/ML Engineer",
-      company: "Infosys",
-      location: "Pune, India",
-      rating: 5,
-      text: "Transitioning into AI was daunting, but the team at Saanvi Careers guided me every step of the way. From upskilling advice to placement — truly end-to-end support.",
-      salaryIncrease: "48%",
-    },
-    {
-      name: "Sarah Chen",
-      role: "Product Manager",
-      company: "Microsoft",
-      location: "Seattle, USA",
-      rating: 5,
-      text: "The personalized career coaching and global network access at Saanvi Careers made my dream role achievable. Exceptional service quality.",
-      salaryIncrease: "42%",
-    },
-    {
-      name: "Kavita Singh",
-      role: "Research Scientist",
-      company: "Pfizer",
-      location: "Pune, India",
-      rating: 4,
-      text: "Excellent understanding of pharmaceutical R&D landscape. They guided me through complex international opportunities with great success.",
-      salaryIncrease: "31%",
-    },
-    {
-      name: "Emily Johnson",
-      role: "Healthcare Director",
-      company: "Johnson & Johnson",
-      location: "London, UK",
-      rating: 5,
-      text: "Their healthcare sector expertise is unmatched. Guided me through complex international relocation and visa processes seamlessly.",
-      salaryIncrease: "33%",
-    },
-    {
-      name: "Michael Chen",
-      role: "Engineering Manager",
-      company: "Tesla",
-      location: "Austin, USA",
-      rating: 4,
-      text: "Great support throughout the interview process. The team's automotive industry insights and technical guidance were spot-on.",
-      salaryIncrease: "47%",
-    },
-  ];
-
-  const renderStars = (rating: number): React.ReactNode[] => {
-    return [...Array(5)].map((_, i) => (
-      <Star
-        key={i}
-        className={`${
-          i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
-        }`}
-        size={16}
-      />
-    ));
-  };
-
-  const companyLogos: CompanyLogo[] = [
-    // Indian Companies (15)
-    { name: "TCS", logo: "/logos/tcs.svg" },
-    { name: "Infosys", logo: "/logos/infosys.svg" },
-    { name: "Wipro", logo: "/logos/wipro.svg" },
-    { name: "HCLTech", logo: "/logos/hcltech.svg" },
-    { name: "Reliance", logo: "/logos/reliance.png" },
-    { name: "Tech Mahindra", logo: "/logos/techmahindra.png" },
-    { name: "Flipkart", logo: "/logos/flipkart.png" },
-    { name: "Zoho", logo: "/logos/zoho.svg" },
-    { name: "Razorpay", logo: "/logos/razorpay.svg" },
-    { name: "Swiggy", logo: "/logos/swiggy.svg" },
-    { name: "Zomato", logo: "/logos/zomato.svg" },
-    { name: "Paytm", logo: "/logos/paytm.svg" },
-    { name: "BYJU'S", logo: "/logos/byjus.svg" },
-    { name: "Ola", logo: "/logos/ola.png" },
-    { name: "PhonePe", logo: "/logos/phonepe.svg" },
-    // Global Companies (15)
-    { name: "Google", logo: "/logos/google.svg" },
-    { name: "Microsoft", logo: "/logos/microsoft.png" },
-    { name: "Amazon", logo: "/logos/amazon.png" },
-    { name: "Apple", logo: "/logos/apple.svg" },
-    { name: "Meta", logo: "/logos/meta.svg" },
-    { name: "Tesla", logo: "/logos/tesla.svg" },
-    { name: "Netflix", logo: "/logos/netflix.svg" },
-    { name: "Goldman Sachs", logo: "/logos/goldmansachs.svg" },
-    { name: "McKinsey", logo: "/logos/mckinsey.png" },
-    { name: "Deloitte", logo: "/logos/deloitte.png" },
-    { name: "Accenture", logo: "/logos/accenture.svg" },
-    { name: "IBM", logo: "/logos/ibm.png" },
-    { name: "Salesforce", logo: "/logos/salesforce.png" },
-    { name: "Adobe", logo: "/logos/adobe.png" },
-    { name: "Pfizer", logo: "/logos/pfizer.png" },
-  ];
+const Testimonials: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView   = useInView(sectionRef, { once: true, amount: 0.1 });
+  const [paused, setPaused] = useState(false);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
-      <div className="container mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Award className="mr-2" size={16} />
-            Client Success Stories
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-            Trusted by{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Professionals Worldwide
+    <section ref={sectionRef} className="py-24 bg-white dark:bg-[#07101d] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* ── HEADER ─────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
+        >
+          <div>
+            <span className="text-xs font-bold text-[#635bff] uppercase tracking-[0.15em] mb-3 block">
+              Client Stories
             </span>
-          </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of professionals who have accelerated their careers
-            with our expert guidance and global network.
-          </p>
-        </div>
-
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group hover:-translate-y-1"
-            >
-              <Quote
-                className="text-blue-100 mb-4 group-hover:text-blue-200 transition-colors"
-                size={32}
-              />
-              <div className="flex items-center mb-4">
-                {renderStars(testimonial.rating)}
-                <span className="ml-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  {testimonial.rating}/5
-                </span>
-              </div>
-              <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                &ldquo;{testimonial.text}&rdquo;
-              </p>
-              <div className="flex items-start justify-between">
-                <div className="flex items-center">
-                  <img
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-3 border-2 border-gray-100 dark:border-gray-700"
-                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      testimonial.name
-                    )}&background=3b82f6&color=ffffff&size=48`}
-                  />
-                  <div>
-                    <h4 className="text-gray-800 dark:text-gray-100 font-semibold text-sm">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-gray-500 dark:text-gray-400 text-xs mb-1">
-                      {testimonial.role}
-                    </p>
-                    <div className="flex items-center text-xs text-gray-400 dark:text-gray-500">
-                      <Building2 size={12} className="mr-1" />
-                      {testimonial.company}
-                    </div>
-                    <div className="flex items-center text-xs text-gray-400 mt-1">
-                      <MapPin size={12} className="mr-1" />
-                      {testimonial.location}
-                    </div>
-                  </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#0a2540] dark:text-white leading-tight">
+              Trusted by professionals<br className="hidden sm:block" /> worldwide.
+            </h2>
+          </div>
+          <div className="flex items-center gap-6">
+            {[
+              { v: '4.9', s: '/5',  l: 'Avg rating'  },
+              { v: '3,200', s: '+', l: 'Placements'   },
+              { v: '97',  s: '%',   l: 'Recommend us' },
+            ].map((item, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <div className="w-px h-10 bg-[#E6EBF1] dark:bg-white/10" />}
+                <div>
+                  <p className="text-2xl font-extrabold text-[#0a2540] dark:text-white leading-none">
+                    {item.v}<span className="text-[#635bff]">{item.s}</span>
+                  </p>
+                  <p className="text-[11px] text-[#697386] mt-1">{item.l}</p>
                 </div>
-                <div className="bg-green-50 text-green-600 px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                  <TrendingUp size={12} className="mr-1" />+
-                  {testimonial.salaryIncrease}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </motion.div>
 
-        {/* Stats Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-          <h3 className="text-3xl font-bold text-center mb-8">
-            Our Track Record Speaks for Itself
-          </h3>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold mb-2">4.8/5</div>
-              <div className="text-blue-100">Average Client Rating</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold mb-2">97%</div>
-              <div className="text-blue-100">Would Recommend Us</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold mb-2">3,200+</div>
-              <div className="text-blue-100">Successful Placements</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold mb-2">48%</div>
-              <div className="text-blue-100">Average Salary Increase</div>
-            </div>
+      </div>
+
+      {/* ── DUAL MARQUEE — full bleed ──────────── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="space-y-4"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <div className="overflow-hidden">
+          <div className={`flex gap-4 marquee-left${paused ? ' marquee-paused' : ''}`} style={{ width: 'max-content' }}>
+            {[...row1, ...row1, ...row1, ...row1].map((t, i) => <Card key={i} t={t} />)}
           </div>
         </div>
+        <div className="overflow-hidden">
+          <div className={`flex gap-4 marquee-right${paused ? ' marquee-paused' : ''}`} style={{ width: 'max-content' }}>
+            {[...row2, ...row2, ...row2, ...row2].map((t, i) => <Card key={i} t={t} />)}
+          </div>
+        </div>
+      </motion.div>
 
-        {/* Company Logos Carousel */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-8 font-medium">
-            Our clients work at leading companies worldwide
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* ── STATS BAR ──────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="mt-12 bg-[#0a2540] rounded-2xl px-8 py-10"
+        >
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+            {[
+              { value: '4.9 / 5', label: 'Average Client Rating'   },
+              { value: '97%',     label: 'Would Recommend Us'      },
+              { value: '3,200+',  label: 'Successful Placements'   },
+              { value: '48%',     label: 'Average Salary Increase' },
+            ].map((s, i) => (
+              <div key={i} className="py-4 sm:py-0 sm:px-6">
+                <p className="text-3xl font-extrabold text-white tracking-tight mb-1">{s.value}</p>
+                <p className="text-white/40 text-sm">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* ── LOGO MARQUEE ───────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="mt-12"
+        >
+          <p className="text-xs font-bold text-[#697386] dark:text-[#8898aa] uppercase tracking-[0.15em] text-center mb-7">
+            Our candidates work at
           </p>
-          <div className="overflow-hidden relative py-6">
-            <div className="flex scroll-animation space-x-10 items-center">
-              {companyLogos.concat(companyLogos).map((company, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-center min-w-max"
-                >
-                  <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl px-6 py-4 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-3">
-                    <img
-                      src={company.logo}
-                      alt={company.name}
-                      className="h-10 w-10 object-contain rounded"
-                    />
-                    <span className="text-gray-800 dark:text-gray-100 font-bold text-base whitespace-nowrap">
-                      {company.name}
-                    </span>
-                  </div>
+          <div className="overflow-hidden relative">
+            <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-white dark:from-[#07101d] to-transparent" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-white dark:from-[#07101d] to-transparent" />
+            <div className="flex scroll-animation gap-4 items-center py-1">
+              {[...companyLogos, ...companyLogos].map((co, i) => (
+                <div key={i} className="flex items-center gap-2 flex-shrink-0 px-5 py-3 bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-xl">
+                  <img src={co.src} alt={co.name} className="h-5 w-auto object-contain" loading="lazy" />
+                  <span className="text-sm font-semibold text-[#425466] dark:text-[#8898aa] whitespace-nowrap">{co.name}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
+
       </div>
     </section>
   );

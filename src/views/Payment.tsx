@@ -171,13 +171,13 @@ export default function Payment() {
   // ── Loading / auth gate ──
   if (authLoading || (state === "loading" && !error)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F6F9FC] via-[#f0effe]/20 to-[#F6F9FC]">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+          <Loader2 className="w-10 h-10 text-[#635bff] animate-spin" />
           <p className="text-gray-600 font-medium">Preparing your payment...</p>
         </motion.div>
       </div>
@@ -187,7 +187,7 @@ export default function Payment() {
   // ── Submitted state ──
   if (state === "submitted") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F6F9FC] via-[#f0effe]/20 to-[#F6F9FC] px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -214,13 +214,13 @@ export default function Payment() {
           <div className="pt-4 border-t border-gray-100 flex items-center justify-center gap-4">
             <button
               onClick={() => router.push("/dashboard")}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-[#0a2540] hover:bg-[#0d3058] text-white rounded-lg font-medium transition-all"
             >
               Go to Dashboard
             </button>
             <button
               onClick={() => router.push("/courses")}
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-[#635bff] hover:text-[#7a73ff] font-medium transition-colors"
             >
               Browse Courses
             </button>
@@ -232,7 +232,7 @@ export default function Payment() {
 
   // ── Main payment flow (showQR / uploadingProof) ──
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-100 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6F9FC] via-[#f0effe]/20 to-[#F6F9FC] py-10 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div {...fadeUp} className="text-center mb-8">
@@ -243,7 +243,7 @@ export default function Payment() {
             <ArrowLeft className="w-4 h-4" />
             Go Back
           </button>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#0a2540] to-[#635bff] bg-clip-text text-transparent">
             Complete Your Payment
           </h1>
           <p className="mt-2 text-gray-500">
@@ -281,10 +281,10 @@ export default function Payment() {
             className="bg-white rounded-2xl shadow-xl overflow-hidden"
           >
             {/* Course & Amount info */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-5 text-white">
+            <div className="bg-[#0a2540] px-6 py-5 text-white">
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                  <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">
+                  <p className="text-white/60 text-sm font-medium uppercase tracking-wide">
                     Course
                   </p>
                   <h2 className="text-xl font-bold mt-0.5">
@@ -292,7 +292,7 @@ export default function Payment() {
                   </h2>
                 </div>
                 <div className="text-right">
-                  <p className="text-blue-100 text-sm font-medium uppercase tracking-wide">
+                  <p className="text-white/60 text-sm font-medium uppercase tracking-wide">
                     Amount
                   </p>
                   <div className="flex items-center gap-1 mt-0.5">
@@ -312,7 +312,7 @@ export default function Payment() {
               {/* QR code */}
               {paymentData.qrDataUrl && (
                 <div className="flex flex-col items-center mb-8">
-                  <div className="bg-white p-3 rounded-xl border-2 border-dashed border-blue-200 shadow-sm">
+                  <div className="bg-white p-3 rounded-xl border-2 border-dashed border-[#635bff]/20 shadow-sm">
                     <img
                       src={paymentData.qrDataUrl}
                       alt="UPI QR Code"
@@ -337,7 +337,7 @@ export default function Payment() {
                     </div>
                     <button
                       onClick={handleCopyUpi}
-                      className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded-lg text-sm font-medium transition-colors"
+                      className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#f0effe] hover:bg-[#f0effe]/80 text-[#635bff] border border-[#635bff]/20 rounded-lg text-sm font-medium transition-colors"
                       title="Copy to clipboard"
                     >
                       {copied ? (
@@ -385,7 +385,7 @@ export default function Payment() {
                     onChange={(e) => setUpiTransactionId(e.target.value)}
                     placeholder="e.g. 412345678901"
                     disabled={state === "uploadingProof"}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-shadow"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#635bff]/20 focus:border-[#635bff] disabled:bg-gray-100 disabled:cursor-not-allowed transition-shadow"
                   />
                   <p className="mt-1 text-xs text-gray-400">
                     You can find this in your UPI app's transaction history.
@@ -433,7 +433,7 @@ export default function Payment() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={state === "uploadingProof"}
-                      className="w-full border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg py-8 flex flex-col items-center gap-2 text-gray-500 hover:text-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full border-2 border-dashed border-gray-300 hover:border-[#635bff]/40 rounded-lg py-8 flex flex-col items-center gap-2 text-gray-500 hover:text-[#635bff] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Upload className="w-8 h-8" />
                       <span className="text-sm font-medium">
@@ -450,7 +450,7 @@ export default function Payment() {
                 <button
                   type="submit"
                   disabled={state === "uploadingProof"}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 bg-[#0a2540] hover:bg-[#0d3058] text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-[#0a2540]/20 hover:shadow-[#0a2540]/30 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {state === "uploadingProof" ? (
                     <>

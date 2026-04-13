@@ -2,25 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Linkedin,
-  Twitter,
-  Facebook,
-  Instagram,
-  Send,
-  MessageCircle,
-  LucideIcon,
-} from "lucide-react";
-import { useRouter, usePathname } from 'next/navigation';
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram, Send, MessageCircle, LucideIcon } from "lucide-react";
+import { usePathname, useRouter } from 'next/navigation';
 import Logo from "@/components/Logo";
 
 interface FooterLink {
   name: string;
   href: string;
-  isRoute?: boolean;
 }
 
 interface SocialLink {
@@ -29,161 +17,110 @@ interface SocialLink {
   url: string;
 }
 
-interface FooterProps {
-  // Currently no props needed - component uses context
-}
-
-const Footer: React.FC<FooterProps> = () => {
+const Footer: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
   const handleNavClick = (href: string): void => {
     if (pathname !== '/') {
       router.push('/');
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+      setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 100);
     } else {
-      const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const quickLinks: FooterLink[] = [
-    { name: "About Us", href: "#about" },
-    { name: "Industries", href: "#industries" },
-    { name: "How It Works", href: "#how-it-works" },
+    { name: "About Us",        href: "#about" },
+    { name: "Industries",      href: "#industries" },
+    { name: "How It Works",    href: "#how-it-works" },
     { name: "Global Presence", href: "#global" },
-    { name: "Contact Us", href: "#contact" },
-    { name: "Gen AI Program", href: "/ai-program", isRoute: true },
+    { name: "Contact Us",      href: "#contact" },
   ];
 
   const industries: FooterLink[] = [
     { name: "IT & Software", href: "#industries" },
-    { name: "Engineering", href: "#industries" },
-    { name: "Healthcare", href: "#industries" },
-    { name: "Finance", href: "#industries" },
-    { name: "Entry Level", href: "#industries" },
+    { name: "Engineering",   href: "#industries" },
+    { name: "Healthcare",    href: "#industries" },
+    { name: "Finance",       href: "#industries" },
+    { name: "Entry Level",   href: "#industries" },
   ];
 
   const locations: FooterLink[] = [
-    { name: "India", href: "#global" },
-    { name: "United States", href: "#global" },
-    { name: "Canada", href: "#global" },
-    { name: "Australia", href: "#global" },
+    { name: "India",          href: "#global" },
+    { name: "United States",  href: "#global" },
+    { name: "United Kingdom", href: "#global" },
+    { name: "Australia",      href: "#global" },
     { name: "European Union", href: "#global" },
     { name: "Gulf Countries", href: "#global" },
   ];
 
   const socialLinks: SocialLink[] = [
+    { icon: Linkedin,      name: "LinkedIn",  url: "https://www.linkedin.com/in/saanvi-careers-8a86a2379" },
+    { icon: Facebook,      name: "Facebook",  url: "https://www.facebook.com/profile.php?id=61579327944939" },
+    { icon: Twitter,       name: "X",         url: "https://x.com/SaanviCareers" },
+    { icon: Instagram,     name: "Instagram", url: "https://www.instagram.com/saanvicareers/" },
+    { icon: Send,          name: "Telegram",  url: "https://t.me/SaanviCareers" },
     {
-      icon: Linkedin,
-      name: "LinkedIn",
-      url: "https://www.linkedin.com/in/saanvi-careers-8a86a2379",
-    },
-    {
-      icon: Facebook,
-      name: "Facebook",
-      url: "https://www.facebook.com/profile.php?id=61579327944939",
-    },
-    {
-      icon: Twitter,
-      name: "X",
-      url: "https://x.com/SaanviCareers",
-    },
-    {
-      icon: Instagram,
-      name: "Instagram",
-      url: "https://www.instagram.com/saanvicareers/",
-    },
-    {
-      icon: Send,
-      name: "Telegram",
-      url: "https://t.me/SaanviCareers",
-    },
-    {
-      icon: MessageCircle,
-      name: "WhatsApp",
+      icon: MessageCircle, name: "WhatsApp",
       url: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "918074172398"}?text=Hi%2C%20I%20want%20to%20know%20about%20Saanvi%20Careers`,
     },
   ];
 
+  const linkClass = "text-sm text-white/40 hover:text-white/80 transition-colors duration-150 block py-0.5";
+
   return (
-    <footer className="bg-gray-100 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-8">
-          {/* Company Info */}
+    <footer className="bg-[#0a2540]">
+      <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
+
+        {/* Main grid */}
+        <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-10 mb-14">
+
+          {/* Brand column */}
           <div className="lg:col-span-2">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-6"
+              transition={{ duration: 0.5 }}
             >
-              <div className="flex items-center space-x-3 mb-4">
+              {/* Logo on dark bg */}
+              <div className="mb-4">
                 <Logo size="default" />
               </div>
-              <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                Connecting exceptional talent with transformative opportunities
-                across the globe. Your trusted partner in career advancement and
-                talent acquisition.
+              <p className="text-white/45 text-sm leading-relaxed mb-6 max-w-xs">
+                Connecting exceptional talent with transformative opportunities across the globe. Your trusted partner in career advancement.
               </p>
 
-              {/* Contact Info */}
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Mail className="text-blue-500" size={18} />
-                  <span className="text-gray-600 dark:text-gray-400">
-                    contact@saanvicareers.com
-                  </span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="text-green-500" size={18} />
-                  <span className="text-gray-600 dark:text-gray-400">+91 8074172398</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="text-purple-500" size={18} />
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Global Offices Worldwide
-                  </span>
-                </div>
+              {/* Contact */}
+              <div className="space-y-2.5">
+                {[
+                  { icon: Mail,   text: "contact@saanvicareers.com" },
+                  { icon: Phone,  text: "+91 8074172398" },
+                  { icon: MapPin, text: "Global Offices Worldwide" },
+                ].map(({ icon: Icon, text }) => (
+                  <div key={text} className="flex items-center gap-3">
+                    <Icon size={15} className="text-[#635bff] flex-shrink-0" />
+                    <span className="text-white/45 text-sm">{text}</span>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </div>
 
           {/* Quick Links */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
           >
-            <span className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4 block">
-              Quick Links
-            </span>
-            <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
-                <li key={index}>
+            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Quick Links</p>
+            <ul className="space-y-0.5">
+              {quickLinks.map((link, i) => (
+                <li key={i}>
                   <a
                     href={link.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (link.isRoute) {
-                        router.push(link.href);
-                        window.scrollTo(0, 0);
-                      } else {
-                        handleNavClick(link.href);
-                      }
-                    }}
-                    className={`hover:text-blue-500 transition-colors duration-200 text-left block ${
-                      link.isRoute
-                        ? "text-blue-600 font-semibold"
-                        : "text-gray-600"
-                    }`}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
+                    className={linkClass}
                   >
                     {link.name}
                   </a>
@@ -194,25 +131,20 @@ const Footer: React.FC<FooterProps> = () => {
 
           {/* Industries */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <span className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4 block">
-              Industries
-            </span>
-            <ul className="space-y-2">
-              {industries.map((industry, index) => (
-                <li key={index}>
+            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Industries</p>
+            <ul className="space-y-0.5">
+              {industries.map((item, i) => (
+                <li key={i}>
                   <a
-                    href={industry.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(industry.href);
-                    }}
-                    className="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200 text-left block"
+                    href={item.href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
+                    className={linkClass}
                   >
-                    {industry.name}
+                    {item.name}
                   </a>
                 </li>
               ))}
@@ -221,25 +153,20 @@ const Footer: React.FC<FooterProps> = () => {
 
           {/* Locations */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
           >
-            <span className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4 block">
-              Locations
-            </span>
-            <ul className="space-y-2">
-              {locations.map((location, index) => (
-                <li key={index}>
+            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Locations</p>
+            <ul className="space-y-0.5">
+              {locations.map((item, i) => (
+                <li key={i}>
                   <a
-                    href={location.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(location.href);
-                    }}
-                    className="text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200 text-left block"
+                    href={item.href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
+                    className={linkClass}
                   >
-                    {location.name}
+                    {item.name}
                   </a>
                 </li>
               ))}
@@ -247,40 +174,37 @@ const Footer: React.FC<FooterProps> = () => {
           </motion.div>
         </div>
 
-        {/* Bottom Section */}
+        {/* Bottom bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="border-t border-white/[0.08] pt-8 flex flex-col md:flex-row justify-between items-center gap-5"
         >
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            {/* Copyright */}
-            <p className="text-gray-500 dark:text-gray-400 text-center md:text-left">
-              &copy; 2024 Saanvi Careers. All rights reserved.
-            </p>
+          <p className="text-white/30 text-sm">
+            &copy; {new Date().getFullYear()} Saanvi Careers. All rights reserved.
+          </p>
 
-            {/* Social Links */}
-            <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
-                    social.name === "WhatsApp"
-                      ? "bg-green-500 hover:bg-green-600"
-                      : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                  }`}
-                  aria-label={social.name}
-                >
-                  <social.icon className="text-white" size={18} />
-                </motion.a>
-              ))}
-            </div>
+          {/* Social icons */}
+          <div className="flex items-center gap-2.5">
+            {socialLinks.map((social, i) => (
+              <motion.a
+                key={i}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150 ${
+                  social.name === "WhatsApp"
+                    ? "bg-[#25D366] hover:bg-[#1ebe5d]"
+                    : "bg-white/[0.08] hover:bg-white/[0.15]"
+                }`}
+                aria-label={social.name}
+              >
+                <social.icon size={16} className="text-white" />
+              </motion.a>
+            ))}
           </div>
         </motion.div>
       </div>

@@ -12,7 +12,7 @@ const AIChatbot = lazy(() => import('@/components/AIChatbot'));
 function PageLoader(): JSX.Element {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-[#635bff] border-t-transparent rounded-full animate-spin" />
     </div>
   );
 }
@@ -28,7 +28,7 @@ export default function ClientLayout({ children }: ClientLayoutProps): JSX.Eleme
     <ErrorBoundary>
       <AuthProvider>
         <div
-          className="min-h-screen bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-100 overflow-x-hidden transition-colors duration-300"
+          className="min-h-screen bg-white dark:bg-[#060e1d] text-[#0a2540] dark:text-white overflow-x-hidden transition-colors duration-300"
           style={perspectiveStyle}
         >
           <Header />

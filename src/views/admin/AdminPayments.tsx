@@ -61,7 +61,7 @@ export default function AdminPayments() {
             <button
               key={t}
               onClick={() => changeTab(t)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${activeTab === t ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${activeTab === t ? 'bg-[#0a2540] text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}
             >
               {t}
             </button>
@@ -72,7 +72,7 @@ export default function AdminPayments() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#635bff]" />
             </div>
           ) : error ? (
             <div className="py-20 text-center text-red-500">{getErrorMessage(error, 'Failed to load payments')}</div>
@@ -111,7 +111,7 @@ export default function AdminPayments() {
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2">
                           {(p.proofUrl || p.proofScreenshot) && (
-                            <button onClick={() => setProofModal(p.proofUrl || p.proofScreenshot)} className="text-blue-600 hover:text-blue-800" title="View proof">
+                            <button onClick={() => setProofModal(p.proofUrl || p.proofScreenshot)} className="text-[#635bff] hover:text-[#0a2540]" title="View proof">
                               <Eye className="w-4 h-4" />
                             </button>
                           )}

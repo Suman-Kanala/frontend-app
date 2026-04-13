@@ -7,6 +7,7 @@ import Industries from '@/components/Industries';
 import HowItWorks from '@/components/HowItWorks';
 import GlobalPresence from '@/components/GlobalPresence';
 import Testimonials from '@/components/Testimonials';
+import CtaSection from '@/components/CtaSection';
 
 export default function HomeClient() {
   return (
@@ -18,6 +19,7 @@ export default function HomeClient() {
       <HowItWorks />
       <GlobalPresence />
       <Testimonials />
+      <CtaSection />
     </>
   );
 }

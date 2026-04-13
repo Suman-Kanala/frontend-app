@@ -4,79 +4,82 @@ import React from 'react';
 
 type LogoSize = 'small' | 'default' | 'large';
 
-interface SizeConfig {
-  height: number;
-  fontSize: number;
-  subSize: number;
-}
-
 interface LogoProps {
   className?: string;
   size?: LogoSize;
 }
 
-export default function Logo({ className = '', size = 'default' }: LogoProps) {
-  const sizes: Record<LogoSize, SizeConfig> = {
-    small: { height: 28, fontSize: 16, subSize: 8 },
-    default: { height: 36, fontSize: 20, subSize: 9 },
-    large: { height: 48, fontSize: 28, subSize: 12 },
-  };
+const sizeMap = {
+  small:   { iconH: 28, nameSize: 15, tagSize: 7.5 },
+  default: { iconH: 36, nameSize: 19, tagSize: 9 },
+  large:   { iconH: 52, nameSize: 27, tagSize: 12 },
+};
 
-  const s = sizes[size] || sizes.default;
+export default function Logo({ className = '', size = 'default' }: LogoProps) {
+  const { iconH, nameSize, tagSize } = sizeMap[size] ?? sizeMap.default;
 
   return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      {/* Icon mark */}
+    <div className={`flex items-center gap-2.5 select-none ${className}`}>
       <svg
         viewBox="0 0 40 40"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ height: s.height, width: s.height }}
+        style={{ height: iconH, width: iconH, flexShrink: 0 }}
+        aria-hidden="true"
       >
         <defs>
-          <linearGradient id="logo-grad-1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#7c3aed" />
+          <linearGradient
+            id="saanvi-bg"
+            x1="0" y1="0" x2="40" y2="40"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0%" stopColor="#0a2540" />
+            <stop offset="100%" stopColor="#635bff" />
           </linearGradient>
-          <linearGradient id="logo-grad-2" x1="10" y1="8" x2="30" y2="32" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#a78bfa" />
-          </linearGradient>
+          <clipPath id="saanvi-clip">
+            <rect width="40" height="40" rx="10" />
+          </clipPath>
         </defs>
-        {/* Rounded square background */}
-        <rect x="0" y="0" width="40" height="40" rx="10" fill="url(#logo-grad-1)" />
-        {/* Abstract "S" path — stylized career growth arrow */}
+
+        {/* Gradient background */}
+        <rect width="40" height="40" rx="10" fill="url(#saanvi-bg)" />
+
+        {/* Subtle top highlight */}
+        <rect
+          width="40"
+          height="22"
+          fill="white"
+          fillOpacity="0.07"
+          clipPath="url(#saanvi-clip)"
+        />
+
+        {/* S lettermark — smooth flowing path suggesting upward growth */}
         <path
-          d="M12 28C12 28 15 22 20 22C25 22 25 18 20 18C15 18 15 14 20 14C25 14 28 8 28 8"
+          d="M26 12C26 8 14 8 14 15C14 20 26 20 26 25C26 32 14 32 14 28"
           stroke="white"
-          strokeWidth="3"
+          strokeWidth="3.5"
           strokeLinecap="round"
           fill="none"
         />
-        {/* Upward arrow tip */}
+
+        {/* 4-pointed star sparkle accent (top-right) */}
         <path
-          d="M25 8L28 8L28 11"
-          stroke="white"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
+          d="M30 7L30.7 9.3L33 10L30.7 10.7L30 13L29.3 10.7L27 10L29.3 9.3Z"
+          fill="white"
+          fillOpacity="0.95"
         />
-        {/* Small dot accent */}
-        <circle cx="12" cy="30" r="2" fill="url(#logo-grad-2)" opacity="0.8" />
       </svg>
 
-      {/* Text */}
-      <div className="flex flex-col leading-none">
+      <div className="flex flex-col leading-none gap-px">
         <span
-          className="font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
-          style={{ fontSize: s.fontSize }}
+          className="font-bold tracking-tight text-[#0a2540] dark:text-white"
+          style={{ fontSize: nameSize }}
         >
           Saanvi
         </span>
         <span
-          className="font-medium tracking-widest uppercase text-gray-500"
-          style={{ fontSize: s.subSize }}
+          className="font-semibold tracking-[0.2em] uppercase text-slate-500"
+          style={{ fontSize: tagSize }}
         >
           Careers
         </span>

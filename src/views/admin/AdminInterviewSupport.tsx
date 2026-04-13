@@ -36,7 +36,7 @@ const paymentStatusBadge = (status: string): string => {
     case 'pending':
       return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
     case 'submitted':
-      return 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200';
+      return 'bg-[#f0effe] dark:bg-[#f0effe]/10 text-[#635bff] dark:text-[#7a73ff]';
     case 'verified':
       return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200';
     case 'rejected':
@@ -103,7 +103,7 @@ export default function AdminInterviewSupport() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#f0effe] via-white to-[#f0effe] dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -112,7 +112,7 @@ export default function AdminInterviewSupport() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-4">
-            <Briefcase className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <Briefcase className="w-8 h-8 text-[#635bff] dark:text-[#7a73ff]" />
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
               Interview Support Management
             </h1>
@@ -139,7 +139,7 @@ export default function AdminInterviewSupport() {
                 setPage(1);
               }}
               placeholder="Search by name, email, or company..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#635bff] focus:border-transparent outline-none"
             />
           </div>
         </motion.div>
@@ -160,7 +160,7 @@ export default function AdminInterviewSupport() {
               }}
               className={`px-6 py-3 font-medium transition-colors capitalize border-b-2 ${
                 tab === tabName
-                  ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                  ? 'border-[#635bff] text-[#635bff] dark:text-[#7a73ff]'
                   : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`}
             >
@@ -172,7 +172,7 @@ export default function AdminInterviewSupport() {
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#635bff]" />
           </div>
         )}
 
@@ -294,7 +294,7 @@ export default function AdminInterviewSupport() {
                         setSelectedBooking(booking);
                         setShowModal('screenshot');
                       }}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors text-sm"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#f0effe] dark:bg-[#f0effe]/10 text-[#635bff] dark:text-[#7a73ff] hover:bg-[#f0effe]/70 dark:hover:bg-[#f0effe]/20 transition-colors text-sm"
                     >
                       <Eye className="w-4 h-4" />
                       View JD Screenshot
@@ -307,7 +307,7 @@ export default function AdminInterviewSupport() {
                         setSelectedBooking(booking);
                         setShowModal('proof');
                       }}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors text-sm"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#f0effe] dark:bg-[#f0effe]/10 text-[#635bff] dark:text-[#7a73ff] hover:bg-[#f0effe]/70 dark:hover:bg-[#f0effe]/20 transition-colors text-sm"
                     >
                       <Eye className="w-4 h-4" />
                       View Proof
@@ -372,7 +372,7 @@ export default function AdminInterviewSupport() {
                     onClick={() => setPage(p)}
                     className={`px-4 py-2 rounded-lg transition-colors ${
                       p === page
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-[#0a2540] text-white'
                         : 'border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
                     }`}
                   >
@@ -519,7 +519,7 @@ export default function AdminInterviewSupport() {
                 onChange={(e) => setRejectReason(e.target.value)}
                 placeholder="e.g., Invalid payment proof, Duplicate booking, etc."
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#635bff] focus:border-transparent outline-none resize-none"
               />
             </div>
             <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex gap-3">
