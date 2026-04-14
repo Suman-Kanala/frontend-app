@@ -141,10 +141,10 @@ export default function SignUpPage() {
     if (!signUp) return;
     setOAuth(true);
     try {
-      await signUp.authenticateWithRedirect({
+      await signUp.sso({
         strategy: 'oauth_google',
         redirectUrl: `${window.location.origin}/sso-callback`,
-        redirectUrlComplete: `${window.location.origin}/dashboard`,
+        redirectCallbackUrl: `${window.location.origin}/dashboard`,
       });
     } catch {
       setOAuth(false);
