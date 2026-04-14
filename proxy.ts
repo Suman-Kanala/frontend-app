@@ -1,15 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { clerkFrontendApiProxy } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export async function proxy(request: NextRequest): Promise<Response> {
-  // Only forward Clerk's own API path to the Clerk handler
-  if (request.nextUrl.pathname.startsWith('/__clerk')) {
-    const clerkResponse = await clerkFrontendApiProxy(request);
-    if (clerkResponse) return clerkResponse;
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/sso-callback(.*)',
+  '/api/contact(.*)',
+  '/api/news(.*)',
+  '/api/jobs(.*)',
+  '/api/syllabus-lead(.*)',
+  '/learn(.*)',
+  '/ai-program(.*)',
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (!isPublicRoute(req)) {
+    await auth.protect();
   }
-
-  return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: [
