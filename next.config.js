@@ -74,7 +74,7 @@ const nextConfig = {
       },
       // Static public pages — CDN-cacheable, ISR-controlled revalidation
       {
-        source: '/(|courses|ai-program)',
+        source: '/(|courses|ai-program|job-finder|learn/:slug*)',
         headers: [
           {
             key: 'Cache-Control',

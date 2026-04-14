@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Search, LayoutDashboard } from 'lucide-react';
+import {
+  Menu, X, Search, LayoutDashboard,
+  LogOut, User, Settings, ChevronDown,
+} from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
-import { UserButton } from '@clerk/nextjs';
+import { useClerk } from '@clerk/nextjs';
 import Logo from '@/components/Logo';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -12,6 +15,173 @@ interface MenuItem {
   name: string;
   href: string;
 }
+
+/* ── Custom user-avatar + dropdown (replaces <UserButton />) ─── */
+function UserMenu() {
+  const { user, isAdmin, logout } = useAuth();
+  const { signOut } = useClerk();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  /* Close on outside click */
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const initials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+    : user?.email?.[0]?.toUpperCase() ?? '?';
+
+  async function handleSignOut() {
+    setOpen(false);
+    await signOut();
+    router.push('/');
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Avatar trigger */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-[#E6EBF1] dark:border-white/10 hover:border-[#635bff]/40 bg-white dark:bg-white/5 hover:bg-[#f8f7ff] dark:hover:bg-white/8 transition-all duration-200 group"
+      >
+        {/* Avatar circle */}
+        {user?.picture ? (
+          <img
+            src={user.picture}
+            alt={user.name}
+            className="w-7 h-7 rounded-full object-cover ring-2 ring-[#635bff]/20"
+          />
+        ) : (
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#635bff] to-[#818cf8] flex items-center justify-center text-white text-[11px] font-bold ring-2 ring-[#635bff]/20">
+            {initials}
+          </div>
+        )}
+        <ChevronDown
+          size={13}
+          className={`text-[#697386] dark:text-[#8898aa] transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      {/* Dropdown */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.97 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="absolute right-0 top-full mt-2.5 w-60 bg-white dark:bg-[#0d1f33] rounded-2xl overflow-hidden z-50"
+            style={{
+              boxShadow: '0 16px 40px -8px rgba(50,50,93,0.18), 0 8px 20px -8px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)',
+            }}
+          >
+            {/* User info */}
+            <div className="px-4 pt-4 pb-3 border-b border-[#E6EBF1] dark:border-white/[0.07]">
+              <div className="flex items-center gap-3">
+                {user?.picture ? (
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-[#635bff]/20"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#635bff] to-[#818cf8] flex items-center justify-center text-white text-sm font-bold ring-2 ring-[#635bff]/20 flex-shrink-0">
+                    {initials}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-[#0a2540] dark:text-white truncate leading-tight">
+                    {user?.name || 'Your Account'}
+                  </p>
+                  <p className="text-[11px] text-[#697386] dark:text-[#8898aa] truncate mt-0.5">
+                    {user?.email}
+                  </p>
+                </div>
+              </div>
+
+              {/* Role badge */}
+              {isAdmin && (
+                <span className="mt-2.5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 px-2 py-0.5 rounded-full">
+                  Admin
+                </span>
+              )}
+            </div>
+
+            {/* Menu items */}
+            <div className="p-2">
+              <DropdownItem
+                icon={<LayoutDashboard size={14} />}
+                label="Dashboard"
+                onClick={() => { setOpen(false); router.push('/dashboard'); }}
+              />
+              {isAdmin && (
+                <DropdownItem
+                  icon={<LayoutDashboard size={14} />}
+                  label="Admin Panel"
+                  onClick={() => { setOpen(false); router.push('/admin'); }}
+                  accent
+                />
+              )}
+              <DropdownItem
+                icon={<User size={14} />}
+                label="Profile"
+                onClick={() => { setOpen(false); router.push('/dashboard'); }}
+              />
+              <DropdownItem
+                icon={<Settings size={14} />}
+                label="Settings"
+                onClick={() => { setOpen(false); router.push('/dashboard'); }}
+              />
+
+              {/* Divider */}
+              <div className="my-1.5 h-px bg-[#E6EBF1] dark:bg-white/[0.07]" />
+
+              {/* Sign out */}
+              <button
+                onClick={handleSignOut}
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors group"
+              >
+                <LogOut size={14} className="flex-shrink-0" />
+                Sign out
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function DropdownItem({
+  icon, label, onClick, accent = false,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  accent?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+        accent
+          ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10'
+          : 'text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white'
+      }`}
+    >
+      <span className="flex-shrink-0">{icon}</span>
+      {label}
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────── */
 
 const Header: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
@@ -29,10 +199,10 @@ const Header: React.FC = () => {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const navLinks: MenuItem[] = [
-    { name: 'About',       href: '#about' },
-    { name: 'Industries',  href: '#industries' },
-    { name: 'How It Works',href: '#how-it-works' },
-    { name: 'Contact',     href: '#contact' },
+    { name: 'About',        href: '#about'      },
+    { name: 'Industries',   href: '#industries' },
+    { name: 'How It Works', href: '#how-it-works' },
+    { name: 'Contact',      href: '#contact'    },
   ];
 
   function scrollTo(href: string): void {
@@ -82,8 +252,6 @@ const Header: React.FC = () => {
                   {item.name}
                 </button>
               ))}
-
-              {/* Find Jobs — highlighted nav link */}
               <button
                 onClick={() => go('/job-finder')}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -114,17 +282,7 @@ const Header: React.FC = () => {
                   Sign In
                 </button>
               ) : (
-                <div className="flex items-center gap-2">
-                  {isAdmin && (
-                    <button
-                      onClick={() => go('/admin')}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors"
-                    >
-                      <LayoutDashboard size={13} /> Admin
-                    </button>
-                  )}
-                  <UserButton />
-                </div>
+                <UserMenu />
               )}
             </div>
 
@@ -201,17 +359,8 @@ const Header: React.FC = () => {
                       Sign In / Sign Up
                     </button>
                   ) : (
-                    <div className="flex items-center justify-between px-1">
-                      {isAdmin && (
-                        <button
-                          onClick={() => go('/admin')}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400"
-                        >
-                          <LayoutDashboard size={13} /> Admin Panel
-                        </button>
-                      )}
-                      <UserButton />
-                    </div>
+                    /* Mobile — inline user card */
+                    <MobileUserCard />
                   )}
                 </div>
               </div>
@@ -222,5 +371,58 @@ const Header: React.FC = () => {
     </>
   );
 };
+
+/* Mobile signed-in card */
+function MobileUserCard() {
+  const { user, isAdmin } = useAuth();
+  const { signOut } = useClerk();
+  const router = useRouter();
+
+  const initials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+    : user?.email?.[0]?.toUpperCase() ?? '?';
+
+  async function handleSignOut() {
+    await signOut();
+    router.push('/');
+  }
+
+  return (
+    <div className="rounded-2xl border border-[#E6EBF1] dark:border-white/[0.07] overflow-hidden">
+      {/* User info */}
+      <div className="flex items-center gap-3 px-4 py-3 bg-[#F6F9FC] dark:bg-white/[0.03]">
+        {user?.picture ? (
+          <img src={user.picture} alt={user.name} className="w-9 h-9 rounded-full object-cover" />
+        ) : (
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#635bff] to-[#818cf8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+            {initials}
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-[#0a2540] dark:text-white truncate">{user?.name || 'Your Account'}</p>
+          <p className="text-[11px] text-[#697386] dark:text-[#8898aa] truncate">{user?.email}</p>
+        </div>
+      </div>
+      {/* Actions */}
+      <div className="p-2 space-y-0.5">
+        <button onClick={() => router.push('/dashboard')}
+          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white transition-colors">
+          <LayoutDashboard size={14} /> Dashboard
+        </button>
+        {isAdmin && (
+          <button onClick={() => router.push('/admin')}
+            className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors">
+            <LayoutDashboard size={14} /> Admin Panel
+          </button>
+        )}
+        <div className="h-px bg-[#E6EBF1] dark:bg-white/[0.07] my-1" />
+        <button onClick={handleSignOut}
+          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
+          <LogOut size={14} /> Sign out
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default Header;

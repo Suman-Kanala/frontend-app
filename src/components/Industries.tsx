@@ -72,18 +72,52 @@ const industries: Industry[] = [
 
 /* ── Orbital geometry ─────────────────────────── */
 const ORBIT_R = 215;
-const C       = 580;          // container px
-const NODE    = 94;            // node circle diameter px
+const C       = 580;   // orbital container px
+const NODE    = 94;    // node circle diameter px
+const PANEL_W = 252;   // info panel width px
+const PANEL_H = 170;   // estimated panel height px (for vertical centering)
 
 function getPos(i: number) {
   const angle = (i * 60 - 90) * (Math.PI / 180);
   const cx    = C / 2;
   return {
-    left: cx + ORBIT_R * Math.cos(angle) - NODE / 2,
-    top:  cx + ORBIT_R * Math.sin(angle) - NODE / 2,
+    left:   cx + ORBIT_R * Math.cos(angle) - NODE / 2,
+    top:    cx + ORBIT_R * Math.sin(angle) - NODE / 2,
     spokeX: cx + ORBIT_R * Math.cos(angle),
     spokeY: cx + ORBIT_R * Math.sin(angle),
   };
+}
+
+/* Panel rendered in the left or right slot, vertically aligned to the node */
+function PanelContent({ ind, slideDir }: { ind: Industry; slideDir: 'left' | 'right' }) {
+  return (
+    <div
+      className="rounded-2xl px-5 py-4 border"
+      style={{
+        background: `linear-gradient(135deg, ${ind.color}0e 0%, transparent 60%)`,
+        borderColor: `${ind.color}2a`,
+        width: PANEL_W,
+      }}
+    >
+      <p className="text-xs font-bold mb-2" style={{ color: ind.color }}>
+        {ind.title}
+      </p>
+      <p className="text-xs text-[#425466] dark:text-[#8898aa] leading-relaxed mb-3">
+        {ind.description}
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {ind.roles.map((r, j) => (
+          <span
+            key={j}
+            className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full"
+            style={{ background: `${ind.color}15`, color: ind.color }}
+          >
+            {r}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 /* ──────────────────────────────────────────────── */
@@ -95,8 +129,18 @@ const Industries: React.FC = () => {
 
   const activeInd = active !== null ? industries[active] : null;
 
+  /* Which slot the panel should appear in, and its vertical offset */
+  const getPanelSlot = (i: number) => {
+    const angle = (i * 60 - 90) * (Math.PI / 180);
+    const cosX  = Math.cos(angle);
+    const sinY  = Math.sin(angle);
+    // Vertical: map sinY (-1..+1) → paddingTop (0..C-PANEL_H)
+    const pt = ((sinY + 1) / 2) * (C - PANEL_H);
+    return { isRight: cosX >= -0.3, pt };
+  };
+
   return (
-    <section id="industries" className="py-24 bg-white dark:bg-[#07101d] overflow-hidden">
+    <section id="industries" className="py-24 bg-white dark:bg-[#07101d]">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ── HEADER ───────────────────────────────── */}
@@ -120,12 +164,35 @@ const Industries: React.FC = () => {
         </motion.div>
 
         {/* ── ORBITAL — desktop ─────────────────────── */}
-        <div className="hidden md:flex flex-col items-center">
+        <div className="hidden md:flex items-start justify-center gap-4">
+
+          {/* ── Left panel slot (Entry Level, Global) ── */}
+          <div style={{ width: PANEL_W, flexShrink: 0, height: C }}>
+            <AnimatePresence mode="wait">
+              {activeInd && active !== null && !getPanelSlot(active).isRight && (() => {
+                const { pt } = getPanelSlot(active);
+                return (
+                  <motion.div
+                    key={`lpanel-${active}`}
+                    initial={{ opacity: 0, x: -14 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.22 }}
+                    style={{ paddingTop: pt }}
+                  >
+                    <PanelContent ind={activeInd} slideDir="left" />
+                  </motion.div>
+                );
+              })()}
+            </AnimatePresence>
+          </div>
+
+          {/* ── Orbital ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.88 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
-            className="relative select-none"
+            className="relative select-none flex-shrink-0"
             style={{ width: C, height: C }}
           >
             {/* ── SVG rings + spokes ── */}
@@ -214,7 +281,7 @@ const Industries: React.FC = () => {
             {/* ── Center hub ── */}
             <div className="absolute inset-0 flex items-center justify-center" style={{ pointerEvents: 'none' }}>
               <div
-                className="w-[168px] h-[168px] rounded-full flex flex-col items-center justify-center text-center transition-all duration-400 relative overflow-hidden"
+                className="w-[168px] h-[168px] rounded-full flex flex-col items-center justify-center text-center relative overflow-hidden"
                 style={{
                   background: activeInd
                     ? `radial-gradient(circle at 40% 40%, ${activeInd.color}1a 0%, ${activeInd.color}06 100%)`
@@ -223,6 +290,7 @@ const Industries: React.FC = () => {
                   boxShadow: activeInd
                     ? `0 0 50px ${activeInd.color}22, inset 0 0 20px ${activeInd.color}0a`
                     : '0 0 30px rgba(99,91,255,0.08)',
+                  transition: 'all 0.4s ease',
                 }}
               >
                 <AnimatePresence mode="wait">
@@ -304,7 +372,6 @@ const Industries: React.FC = () => {
                       transform: on ? 'scale(1.18)' : 'scale(1)',
                     }}
                   >
-                    {/* Colored radial glow inside node when active */}
                     {on && (
                       <div
                         className="absolute inset-0 rounded-full pointer-events-none"
@@ -335,40 +402,27 @@ const Industries: React.FC = () => {
             })}
           </motion.div>
 
-          {/* ── Description panel ── */}
-          <div className="w-full max-w-2xl -mt-6" style={{ minHeight: 90 }}>
+          {/* ── Right panel slot (IT, Finance, Healthcare, Engineering) ── */}
+          <div style={{ width: PANEL_W, flexShrink: 0, height: C }}>
             <AnimatePresence mode="wait">
-              {activeInd && (
-                <motion.div
-                  key={`panel-${active}`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.22 }}
-                  className="rounded-2xl px-8 py-5 border"
-                  style={{
-                    background: `linear-gradient(135deg, ${activeInd.color}0d 0%, transparent 60%)`,
-                    borderColor: `${activeInd.color}2a`,
-                  }}
-                >
-                  <p className="text-sm text-[#425466] dark:text-[#8898aa] mb-3 leading-relaxed">
-                    {activeInd.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {activeInd.roles.map((r, j) => (
-                      <span
-                        key={j}
-                        className="text-xs font-semibold px-3 py-1 rounded-full"
-                        style={{ background: `${activeInd.color}15`, color: activeInd.color }}
-                      >
-                        {r}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
+              {activeInd && active !== null && getPanelSlot(active).isRight && (() => {
+                const { pt } = getPanelSlot(active);
+                return (
+                  <motion.div
+                    key={`rpanel-${active}`}
+                    initial={{ opacity: 0, x: 14 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.22 }}
+                    style={{ paddingTop: pt }}
+                  >
+                    <PanelContent ind={activeInd} slideDir="right" />
+                  </motion.div>
+                );
+              })()}
             </AnimatePresence>
           </div>
+
         </div>
 
         {/* ── MOBILE GRID ────────────────────────────── */}

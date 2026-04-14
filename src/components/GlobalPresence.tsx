@@ -47,7 +47,7 @@ const regions = [
     subtitle: 'Continental Europe',
     sectors: ['Tech', 'Finance', 'Engineering'],
     stat: '250+',
-    img: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=1000&q=80&auto=format&fit=crop',
+    img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1000&q=80&auto=format&fit=crop',
     color: '#8b5cf6',
   },
   {
