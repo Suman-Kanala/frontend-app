@@ -39,5 +39,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Chat API dev server running on http://localhost:${PORT}`);
+  // Dev-only startup log removed for cleaner production preparation
 });

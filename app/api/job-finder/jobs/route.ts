@@ -121,7 +121,6 @@ async function fetchAdzuna(role: string, countryCode: string): Promise<RawJob[]>
       return [];
     }
     const data = await res.json();
-    console.log(`[Adzuna/${country}] ${data.results?.length ?? 0} results for "${role}"`);
     return (data.results ?? [])
       .filter((j: any) => isRecent(j.created))
       .map((j: any): RawJob => ({
