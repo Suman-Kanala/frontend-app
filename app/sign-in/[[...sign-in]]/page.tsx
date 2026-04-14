@@ -44,19 +44,16 @@ export default function SignInPage() {
     setLoading(true);
     setError('');
     try {
-      // Step 1: identify
-      const { error: createErr } = await signIn.create({ identifier: email });
+      // Single call with both identifier + password
+      const { error: createErr } = await signIn.create({
+        identifier: email,
+        password,
+      });
       if (createErr) {
         setError(createErr.longMessage ?? createErr.message ?? 'Sign in failed.');
         return;
       }
-      // Step 2: verify password
-      const { error: pwErr } = await signIn.password({ password });
-      if (pwErr) {
-        setError(pwErr.longMessage ?? pwErr.message ?? 'Incorrect password.');
-        return;
-      }
-      // Step 3: finalize session
+      // Finalize to activate the session
       if (signIn.status === 'complete') {
         const { error: finalErr } = await signIn.finalize();
         if (finalErr) {
