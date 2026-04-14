@@ -30,6 +30,10 @@ export default function SignUpPage() {
             headerSubtitle: 'text-sm text-[#697386]',
             formButtonPrimary: 'bg-[#635bff] hover:bg-[#4f46e5] text-sm font-semibold',
             footerActionLink: 'text-[#635bff] font-semibold hover:text-[#4f46e5]',
+            socialButtonsBlockButton: 'border border-[#E6EBF1] text-sm font-semibold',
+          },
+          layout: {
+            socialButtonsPlacement: 'top',
           },
         }}
       />
