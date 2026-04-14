@@ -13,7 +13,7 @@ export default function SignInPage() {
         routing="path"
         path="/sign-in"
         signUpUrl="/sign-up"
-        forceRedirectUrl="/dashboard"
+        forceRedirectUrl="/"
         appearance={{
           variables: {
             colorPrimary: '#635bff',
@@ -31,6 +31,7 @@ export default function SignInPage() {
             formButtonPrimary: 'bg-[#635bff] hover:bg-[#4f46e5] text-sm font-semibold',
             footerActionLink: 'text-[#635bff] font-semibold hover:text-[#4f46e5]',
             socialButtonsBlockButton: 'border border-[#E6EBF1] text-sm font-semibold',
+            footer: 'hidden',
           },
           layout: {
             socialButtonsPlacement: 'top',

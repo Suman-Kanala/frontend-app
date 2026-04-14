@@ -10,6 +10,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useClerk } from '@clerk/nextjs';
 import Logo from '@/components/Logo';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 interface MenuItem {
   name: string;
@@ -21,6 +22,7 @@ function UserMenu() {
   const { user, isAdmin, logout } = useAuth();
   const { signOut } = useClerk();
   const router = useRouter();
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -40,6 +42,10 @@ function UserMenu() {
   async function handleSignOut() {
     setOpen(false);
     await signOut();
+    toast({
+      title: 'Signed out',
+      description: 'You have been signed out successfully.',
+    });
     router.push('/');
   }
 
@@ -377,6 +383,7 @@ function MobileUserCard() {
   const { user, isAdmin } = useAuth();
   const { signOut } = useClerk();
   const router = useRouter();
+  const { toast } = useToast();
 
   const initials = user?.name
     ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
@@ -384,6 +391,10 @@ function MobileUserCard() {
 
   async function handleSignOut() {
     await signOut();
+    toast({
+      title: 'Signed out',
+      description: 'You have been signed out successfully.',
+    });
     router.push('/');
   }
 

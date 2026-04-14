@@ -1,7 +1,8 @@
 'use client';
 
-import { ReactNode, createContext, useContext } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useRef } from 'react';
 import { useUser, useClerk, useAuth as useClerkAuth } from '@clerk/nextjs';
+import { useToast } from '@/components/ui/use-toast';
 
 /* The admin email — always granted admin role regardless of metadata */
 const ADMIN_EMAIL = 'kanalasuman1@gmail.com';
@@ -40,10 +41,25 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const { user, isLoaded, isSignedIn } = useUser();
   const { signOut } = useClerk();
   const { getToken } = useClerkAuth();
+  const { toast } = useToast();
+  const prevSignedIn = useRef<boolean | undefined>(undefined);
 
   const email    = user?.primaryEmailAddress?.emailAddress ?? '';
   const metadata = user?.publicMetadata as Record<string, string> | undefined;
   const role     = metadata?.role || (email === ADMIN_EMAIL ? 'admin' : 'student');
+
+  // Show welcome toast on sign-in
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (prevSignedIn.current === false && isSignedIn === true) {
+      const name = user?.firstName ?? user?.fullName ?? 'back';
+      toast({
+        title: `Welcome, ${name}!`,
+        description: 'You are now signed in.',
+      });
+    }
+    prevSignedIn.current = isSignedIn ?? false;
+  }, [isLoaded, isSignedIn]);
 
   const dbUser: DbUser | null = user
     ? {
