@@ -19,13 +19,13 @@ export default function SignInPage() {
   const { signIn } = useSignIn();
   const router = useRouter();
 
-  const [step, setStep]         = useState<'email' | 'password'>('email');
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
-  const [showPw, setShowPw]     = useState(false);
-  const [loading, setLoading]   = useState(false);
+  const [step, setStep]          = useState<'email' | 'password'>('email');
+  const [email, setEmail]        = useState('');
+  const [password, setPassword]  = useState('');
+  const [showPw, setShowPw]      = useState(false);
+  const [loading, setLoading]    = useState(false);
   const [oauthLoading, setOAuth] = useState(false);
-  const [error, setError]       = useState('');
+  const [error, setError]        = useState('');
 
   useEffect(() => { setError(''); }, [email, password]);
 
@@ -44,18 +44,25 @@ export default function SignInPage() {
     setLoading(true);
     setError('');
     try {
-      const createResult = await signIn.create({ identifier: email });
-      if (createResult.error) {
-        setError(createResult.error.longMessage ?? createResult.error.message ?? 'Sign in failed.');
+      // Step 1: identify
+      const { error: createErr } = await signIn.create({ identifier: email });
+      if (createErr) {
+        setError(createErr.longMessage ?? createErr.message ?? 'Sign in failed.');
         return;
       }
-      const pwResult = await signIn.password({ password });
-      if (pwResult.error) {
-        setError(pwResult.error.longMessage ?? pwResult.error.message ?? 'Incorrect password.');
+      // Step 2: verify password
+      const { error: pwErr } = await signIn.password({ password });
+      if (pwErr) {
+        setError(pwErr.longMessage ?? pwErr.message ?? 'Incorrect password.');
         return;
       }
+      // Step 3: finalize session
       if (signIn.status === 'complete') {
-        await signIn.finalize();
+        const { error: finalErr } = await signIn.finalize();
+        if (finalErr) {
+          setError(finalErr.longMessage ?? finalErr.message ?? 'Could not complete sign in.');
+          return;
+        }
         router.push('/dashboard');
       }
     } catch (err: any) {

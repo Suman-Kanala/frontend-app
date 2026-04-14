@@ -141,11 +141,11 @@ export default function SignUpPage() {
     if (!signUp) return;
     setOAuth(true);
     try {
-      await signUp.sso({
+      await signUp.authenticateWithRedirect({
         strategy: 'oauth_google',
-        redirectUrl:         `${window.location.origin}/sso-callback`,
-        redirectCallbackUrl: `${window.location.origin}/dashboard`,
-      } as any);
+        redirectUrl: `${window.location.origin}/sso-callback`,
+        redirectUrlComplete: `${window.location.origin}/dashboard`,
+      });
     } catch {
       setOAuth(false);
       setError('Google sign-up failed. Please try again.');
