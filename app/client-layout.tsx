@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ScrollToTop from '@/components/ScrollToTop';
+import AuthToast from '@/components/AuthToast';
 
 const AIChatbot = lazy(() => import('@/components/AIChatbot'));
 
@@ -41,6 +42,7 @@ export default function ClientLayout({ children }: ClientLayoutProps): JSX.Eleme
           <Footer />
           <Toaster />
           <ScrollToTop />
+          <AuthToast />
         </div>
         <Suspense fallback={null}>
           <AIChatbot />
