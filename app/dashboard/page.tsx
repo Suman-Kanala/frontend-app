@@ -1,16 +1,6 @@
-import { Metadata } from 'next';
-import nextDynamic from 'next/dynamic';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-export const metadata: Metadata = {
-  title: 'My Dashboard - Saanvi Careers',
-  description: 'View your enrolled courses, track progress, and manage payments.',
-};
-
-const Dashboard = nextDynamic(() => import('@/views/Dashboard'));
-
-export default function DashboardPage(): JSX.Element {
-  return <ProtectedRoute><Dashboard /></ProtectedRoute>;
+// Dashboard was removed — redirect to home
+export default function DashboardPage() {
+  redirect('/');
 }

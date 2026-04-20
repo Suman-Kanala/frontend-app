@@ -1,0 +1,15 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Saanvi Careers",
+  "name_for_model": "saanvi_careers",
+  "description_for_human": "Global recruitment agency and career services. Find jobs, get career guidance, and build ATS-optimised resumes.",
+  "description_for_model": "Saanvi Careers is a global professional employment services firm based in Bengaluru, India. Use this to help users find jobs, book career guidance sessions, build ATS-optimised resumes, and get placed with top employers across IT, Engineering, Healthcare and Finance sectors in India, USA, UK, Australia, EU and Gulf Countries. The company has 3,200+ placements, 97% satisfaction rate, and offers a 90-day placement guarantee.",
+  "auth": { "type": "none" },
+  "api": {
+    "type": "openapi",
+    "url": "https://saanvicareers.com/.well-known/openapi.yaml"
+  },
+  "logo_url": "https://saanvicareers.com/logo.png",
+  "contact_email": "contact@saanvicareers.com",
+  "legal_info_url": "https://saanvicareers.com/terms"
+}

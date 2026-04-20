@@ -1,10 +1,5 @@
-import nextDynamic from 'next/dynamic';
-import { AdminRoute } from '@/components/ProtectedRoute';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-const AdminDashboard = nextDynamic(() => import('@/views/admin/AdminDashboard'));
-
-export default function AdminPage(): JSX.Element {
-  return <AdminRoute><AdminDashboard /></AdminRoute>;
+export default function AdminPage() {
+  redirect('/admin/users');
 }

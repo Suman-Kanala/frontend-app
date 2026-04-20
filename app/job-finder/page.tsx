@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Mail, Phone, Briefcase, Clock, Tag, X, ChevronRight,
   Upload, FileText, CheckCircle, Search, MapPin,
-  Loader2, AlertCircle, Building2, ArrowLeft,
+  Loader2, AlertCircle, Building2, ArrowLeft, Download, Eye,
 } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 export interface MatchedJob {
   id: string; title: string; company: string; location: string;
   url: string; type: string; postedAt: string; daysAgo: number;
@@ -22,6 +23,8 @@ interface ProfileData {
   role: string;
   experience: string;
   skills: string[];
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
 }
 
 const EXPERIENCE_OPTIONS = [
@@ -101,9 +104,13 @@ export default function JobFinderPage() {
   const [step, setStep]                   = useState(0);
   const [dir, setDir]                     = useState(1);
   const [profile, setProfile]             = useState<ProfileData>({
-    name: '', email: '', phone: '', role: '', experience: '', skills: [],
+    name: '', email: '', phone: '', role: '', experience: '', skills: [], emailVerified: false, phoneVerified: false,
   });
   const [skillInput, setSkillInput]       = useState('');
+  const [otpSent, setOtpSent]             = useState(false);
+  const [otpInput, setOtpInput]           = useState('');
+  const [sendingOtp, setSendingOtp]       = useState(false);
+  const [verifyingOtp, setVerifyingOtp]   = useState(false);
   const [countries, setCountries]         = useState<string[]>([]);
   const [resumeFile, setResumeFile]       = useState<File | null>(null);
   const [dragOver, setDragOver]           = useState(false);
@@ -116,12 +123,112 @@ export default function JobFinderPage() {
   const [showATSModal, setShowATSModal]   = useState(false);
   const [lastAppliedJob, setLastApplied]  = useState<MatchedJob | null>(null);
   const fileInputRef                      = useRef<HTMLInputElement>(null);
+  const { isAdmin }                       = useAuth();
+  const [checkingEmail, setCheckingEmail] = useState(false);
+  const emailCheckTimeoutRef              = useRef<NodeJS.Timeout | null>(null);
+
+  /* ── Check if email is already verified (with debounce) ──────── */
+  async function checkEmailVerification(email: string) {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    
+    try {
+      setCheckingEmail(true);
+      const res = await fetch(`/api/job-finder/profile?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      
+      if (data.emailVerified) {
+        setProfile(p => ({ ...p, emailVerified: true }));
+        setOtpSent(false);
+        setOtpInput('');
+        toast({ 
+          title: 'Email already verified!', 
+          description: 'This email was verified previously. You can continue.' 
+        });
+      }
+    } catch (err) {
+      console.error('Error checking email:', err);
+    } finally {
+      setCheckingEmail(false);
+    }
+  }
+
+  /* ── Debounced email check (waits 1.5 seconds after user stops typing) ──────── */
+  function debouncedEmailCheck(email: string) {
+    // Clear any existing timeout
+    if (emailCheckTimeoutRef.current) {
+      clearTimeout(emailCheckTimeoutRef.current);
+    }
+
+    // Only check if email is valid
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      // Set new timeout to check after 1.5 seconds
+      emailCheckTimeoutRef.current = setTimeout(() => {
+        checkEmailVerification(email);
+      }, 1500);
+    }
+  }
+
+  /* ── Cleanup timeout on unmount ──────── */
+  useEffect(() => {
+    return () => {
+      if (emailCheckTimeoutRef.current) {
+        clearTimeout(emailCheckTimeoutRef.current);
+      }
+    };
+  }, []);
 
   /* ── Navigation ─────────────────────────────────── */
   function goTo(next: number) {
     setDir(next > step ? 1 : -1);
     setStep(next);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── Email OTP ──────────────────────────────────── */
+  async function sendOTP() {
+    if (!profile.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) {
+      toast({ title: 'Invalid email', description: 'Please enter a valid email address.', variant: 'destructive' });
+      return;
+    }
+    setSendingOtp(true);
+    try {
+      const res = await fetch('/api/job-finder/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'send', email: profile.email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setOtpSent(true);
+      toast({ title: 'OTP sent!', description: 'Check your email for the verification code.' });
+    } catch (err: any) {
+      toast({ title: 'Failed to send OTP', description: err.message || 'Please try again.', variant: 'destructive' });
+    } finally {
+      setSendingOtp(false);
+    }
+  }
+
+  async function verifyOTP() {
+    if (!otpInput.trim()) {
+      toast({ title: 'Enter OTP', description: 'Please enter the 6-digit code from your email.', variant: 'destructive' });
+      return;
+    }
+    setVerifyingOtp(true);
+    try {
+      const res = await fetch('/api/job-finder/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify', email: profile.email, otp: otpInput }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setProfile(p => ({ ...p, emailVerified: true }));
+      toast({ title: 'Email verified!', description: 'You can now continue.' });
+    } catch (err: any) {
+      toast({ title: 'Verification failed', description: err.message || 'Invalid or expired OTP.', variant: 'destructive' });
+    } finally {
+      setVerifyingOtp(false);
+    }
   }
 
   /* ── Skills ─────────────────────────────────────── */
@@ -140,12 +247,16 @@ export default function JobFinderPage() {
 
   /* ── Step 1 → save profile ──────────────────────── */
   async function submitProfile() {
-    if (!profile.name || !profile.email || !profile.role || !profile.experience || !profile.skills.length) {
-      toast({ title: 'Missing fields', description: 'Please fill in all required fields including at least one skill.', variant: 'destructive' });
+    if (!profile.name || !profile.email || !profile.phone || !profile.role || !profile.experience || !profile.skills.length) {
+      toast({ title: 'Missing fields', description: 'Please fill in all required fields including phone and at least one skill.', variant: 'destructive' });
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) {
       toast({ title: 'Invalid email', variant: 'destructive' });
+      return;
+    }
+    if (!profile.emailVerified) {
+      toast({ title: 'Email not verified', description: 'Please verify your email with the OTP sent to your inbox.', variant: 'destructive' });
       return;
     }
     goTo(1);
@@ -313,22 +424,111 @@ export default function JobFinderPage() {
                         <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#697386]" />
                         <input
                           type="email" value={profile.email}
-                          onChange={e => setProfile(p => ({ ...p, email: e.target.value }))}
-                          className={`${inputCls} pl-9`} placeholder="you@example.com"
+                          onChange={e => {
+                            const newEmail = e.target.value;
+                            setProfile(p => ({ ...p, email: newEmail, emailVerified: false }));
+                            setOtpSent(false);
+                            setOtpInput('');
+                            // Trigger debounced email check (waits 1.5s after user stops typing)
+                            debouncedEmailCheck(newEmail.trim());
+                          }}
+                          disabled={profile.emailVerified}
+                          className={`${inputCls} pl-9 ${profile.emailVerified ? 'bg-emerald-50 dark:bg-emerald-500/5 border-emerald-300 dark:border-emerald-500/30 pr-20' : ''}`}
+                          placeholder="you@example.com"
                         />
+                        {checkingEmail && (
+                          <Loader2 size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#635bff] animate-spin" />
+                        )}
+                        {profile.emailVerified && !checkingEmail && (
+                          <>
+                            <CheckCircle size={16} className="absolute right-16 top-1/2 -translate-y-1/2 text-emerald-500" />
+                            <button
+                              onClick={() => {
+                                setProfile(p => ({ ...p, emailVerified: false }));
+                                setOtpSent(false);
+                                setOtpInput('');
+                              }}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#635bff] hover:text-[#4f46e5] transition-colors px-2 py-1"
+                              type="button"
+                            >
+                              Edit
+                            </button>
+                          </>
+                        )}
                       </div>
+                      
+                      {/* OTP verification UI */}
+                      {!profile.emailVerified && profile.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email) && (
+                        <div className="mt-3 p-3 bg-[#f0effe] dark:bg-[#635bff]/10 border border-[#635bff]/20 rounded-xl">
+                          {!otpSent ? (
+                            <button
+                              onClick={sendOTP}
+                              disabled={sendingOtp}
+                              className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold text-[#635bff] hover:text-[#4f46e5] transition-colors disabled:opacity-60"
+                            >
+                              {sendingOtp ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
+                              {sendingOtp ? 'Sending OTP...' : 'Send verification code'}
+                            </button>
+                          ) : (
+                            <div className="space-y-2">
+                              <p className="text-xs text-[#425466] dark:text-[#8898aa] font-medium">
+                                Enter the 6-digit code sent to <span className="font-bold text-[#635bff]">{profile.email}</span>
+                              </p>
+                              <div className="flex gap-2">
+                                <input
+                                  type="text"
+                                  value={otpInput}
+                                  onChange={e => setOtpInput(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                  placeholder="000000"
+                                  maxLength={6}
+                                  className="flex-1 px-3 py-2 bg-white dark:bg-white/5 border border-[#E6EBF1] dark:border-white/10 rounded-lg text-center text-lg font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-[#635bff]/20 focus:border-[#635bff]"
+                                />
+                                <button
+                                  onClick={verifyOTP}
+                                  disabled={verifyingOtp || otpInput.length !== 6}
+                                  className="px-4 py-2 bg-[#635bff] hover:bg-[#4f46e5] disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors"
+                                >
+                                  {verifyingOtp ? <Loader2 size={14} className="animate-spin" /> : 'Verify'}
+                                </button>
+                              </div>
+                              <button
+                                onClick={sendOTP}
+                                disabled={sendingOtp}
+                                className="text-xs text-[#635bff] hover:text-[#4f46e5] font-medium transition-colors disabled:opacity-60"
+                              >
+                                Resend code
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      {profile.emailVerified && (
+                        <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                          <CheckCircle size={12} /> Email verified successfully
+                        </p>
+                      )}
                     </div>
                   </div>
 
                   {/* Phone */}
                   <div>
-                    <label className="block text-xs font-semibold text-[#425466] dark:text-[#8898aa] mb-1.5">Phone</label>
+                    <label className="block text-xs font-semibold text-[#425466] dark:text-[#8898aa] mb-1.5">
+                      Phone <span className="text-red-400">*</span>
+                    </label>
                     <div className="relative">
                       <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#697386]" />
                       <input
-                        type="tel" value={profile.phone}
-                        onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))}
-                        className={`${inputCls} pl-9`} placeholder="+91 98765 43210"
+                        type="tel" 
+                        value={profile.phone}
+                        onChange={e => {
+                          // Only allow numbers, +, spaces, and hyphens
+                          const value = e.target.value.replace(/[^\d+\s-]/g, '');
+                          setProfile(p => ({ ...p, phone: value }));
+                        }}
+                        className={`${inputCls} pl-9`}
+                        placeholder="+91 98765 43210"
+                        maxLength={20}
                       />
                     </div>
                   </div>
@@ -725,60 +925,64 @@ export default function JobFinderPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto"
           >
-            <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.92, opacity: 0 }}
-              transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
-            >
-              {/* Close */}
-              <button
-                onClick={() => setShowATSModal(false)}
-                className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-white/90 hover:bg-white text-[#425466] hover:text-[#0a2540] shadow transition-colors"
+            <div className="min-h-screen flex items-center justify-center p-4">
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.92, opacity: 0, y: 20 }}
+                transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+                className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
               >
-                <X size={16} />
-              </button>
+                {/* Close */}
+                <button
+                  onClick={() => setShowATSModal(false)}
+                  className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-white/90 hover:bg-white text-[#425466] hover:text-[#0a2540] shadow transition-colors"
+                >
+                  <X size={16} />
+                </button>
 
-              {/* Header strip */}
-              <div className="bg-[#0a2540] px-7 py-4 flex-shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#635bff] flex items-center justify-center">
-                    <FileText size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold text-sm">Application submitted!</p>
-                    <p className="text-white/50 text-xs">
-                      {lastAppliedJob ? `${lastAppliedJob.title} at ${lastAppliedJob.company}` : 'Our team will be in touch.'}
-                    </p>
+                {/* Header strip */}
+                <div className="bg-[#0a2540] px-7 py-4 flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#635bff] flex items-center justify-center">
+                      <FileText size={16} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-sm">Application submitted!</p>
+                      <p className="text-white/50 text-xs">
+                        {lastAppliedJob ? `${lastAppliedJob.title} at ${lastAppliedJob.company}` : 'Our team will be in touch.'}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Body */}
-              <div className="relative bg-white dark:bg-[#0d1f33] overflow-y-auto flex-1">
+                {/* Body */}
+                <div className="relative bg-white dark:bg-[#0d1f33] overflow-y-auto flex-1">
 
-                {/* Blurred resume preview */}
-                <div className="select-none pointer-events-none px-8 pt-8 pb-4 space-y-5"
-                  style={{ filter: 'blur(5px)', userSelect: 'none' }}>
+                  {/* Blurred resume preview */}
+                  <div 
+                    id="resume-preview"
+                    className="select-none pointer-events-none px-8 pt-8 pb-4 space-y-5"
+                    style={{ filter: 'blur(5px)', userSelect: 'none' }}
+                  >
 
-                  {/* Resume header */}
-                  <div className="text-center border-b border-gray-200 pb-4">
-                    <h1 className="text-2xl font-bold text-[#0a2540]">{profile.name || 'Your Name'}</h1>
-                    <p className="text-sm text-[#425466] mt-1">
-                      {profile.email} &nbsp;|&nbsp; {profile.phone || '+91 XXXXX XXXXX'} &nbsp;|&nbsp; LinkedIn &nbsp;|&nbsp; GitHub
-                    </p>
-                  </div>
+                    {/* Resume header */}
+                    <div className="text-center border-b border-gray-200 pb-4">
+                      <h1 className="text-2xl font-bold text-[#0a2540]">{profile.name || 'Your Name'}</h1>
+                      <p className="text-sm text-[#425466] mt-1">
+                        {profile.email} &nbsp;|&nbsp; {profile.phone || '+91 XXXXX XXXXX'} &nbsp;|&nbsp; LinkedIn &nbsp;|&nbsp; GitHub
+                      </p>
+                    </div>
 
-                  {/* Skills */}
-                  <div>
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-[#0a2540] mb-2 border-b border-gray-200 pb-1">Technical Skills</h2>
-                    <div className="text-xs text-[#425466] space-y-1">
-                      <p><span className="font-semibold">Languages:</span> {profile.skills.slice(0, 4).join(', ') || 'JavaScript, Python, SQL, Java'}</p>
-                      <p><span className="font-semibold">Frameworks:</span> {profile.skills.slice(4, 8).join(', ') || 'React, Node.js, Express, Spring Boot'}</p>
-                      <p><span className="font-semibold">Tools:</span> Git, Docker, Kubernetes, AWS, Jenkins, Jira</p>
+                    {/* Skills */}
+                    <div>
+                      <h2 className="text-xs font-bold uppercase tracking-widest text-[#0a2540] mb-2 border-b border-gray-200 pb-1">Technical Skills</h2>
+                      <div className="text-xs text-[#425466] space-y-1">
+                        <p><span className="font-semibold">Languages:</span> {profile.skills.slice(0, 4).join(', ') || 'JavaScript, Python, SQL, Java'}</p>
+                        <p><span className="font-semibold">Frameworks:</span> {profile.skills.slice(4, 8).join(', ') || 'React, Node.js, Express, Spring Boot'}</p>
+                        <p><span className="font-semibold">Tools:</span> Git, Docker, Kubernetes, AWS, Jenkins, Jira</p>
                       <p><span className="font-semibold">Databases:</span> MongoDB, PostgreSQL, Redis, MySQL</p>
                     </div>
                   </div>
@@ -844,6 +1048,196 @@ export default function JobFinderPage() {
                       Our team will craft a <strong className="text-[#0a2540] dark:text-white">keyword-optimised ATS resume</strong> tailored to {lastAppliedJob?.title || 'your target role'} and beat the screening bots.
                     </p>
                     <div className="space-y-2.5">
+                      {/* Admin Features */}
+                      {isAdmin && (
+                        <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl">
+                          <p className="text-xs font-semibold text-amber-800 dark:text-amber-400 mb-2 flex items-center justify-center gap-1">
+                            <Eye size={12} />
+                            Admin Preview
+                          </p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const resumePreview = document.getElementById('resume-preview');
+                                const overlay = e.currentTarget.closest('.absolute.inset-0') as HTMLElement;
+                                if (resumePreview && overlay) {
+                                  resumePreview.style.filter = 'none';
+                                  resumePreview.style.userSelect = 'auto';
+                                  resumePreview.classList.remove('pointer-events-none', 'select-none');
+                                  overlay.style.display = 'none';
+                                  toast({ title: 'Resume Unlocked', description: 'You can now view and interact with the resume' });
+                                }
+                              }}
+                              className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition-colors"
+                            >
+                              <Eye size={12} />
+                              View Resume
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                
+                                // Get the resume preview element
+                                const resumePreview = document.getElementById('resume-preview');
+                                if (!resumePreview) {
+                                  toast({ title: 'Error', description: 'Resume preview not found', variant: 'destructive' });
+                                  return;
+                                }
+                                
+                                // Clone the element to avoid modifying the original
+                                const resumeClone = resumePreview.cloneNode(true) as HTMLElement;
+                                
+                                // Remove blur and restrictions from clone
+                                resumeClone.style.filter = 'none';
+                                resumeClone.style.userSelect = 'auto';
+                                resumeClone.classList.remove('pointer-events-none', 'select-none');
+                                
+                                // Create a complete HTML document with styling
+                                const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATS Resume - ${profile.name}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #0a2540;
+      background: white;
+      padding: 40px;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    p {
+      font-size: 14px;
+      color: #425466;
+      margin-bottom: 8px;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .border-b {
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .space-y-5 > * + * {
+      margin-top: 20px;
+    }
+    .space-y-3 > * + * {
+      margin-top: 12px;
+    }
+    .space-y-1 > * + * {
+      margin-top: 4px;
+    }
+    .text-xs {
+      font-size: 12px;
+    }
+    .text-sm {
+      font-size: 14px;
+    }
+    .font-semibold {
+      font-weight: 600;
+    }
+    .font-bold {
+      font-weight: 700;
+    }
+    .flex {
+      display: flex;
+    }
+    .justify-between {
+      justify-content: space-between;
+    }
+    .items-baseline {
+      align-items: baseline;
+    }
+    .gap-1 {
+      gap: 4px;
+    }
+    .gap-1\\.5 {
+      gap: 6px;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      display: flex;
+      gap: 6px;
+      font-size: 12px;
+      color: #425466;
+      margin-bottom: 4px;
+    }
+    li span:first-child {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    @media print {
+      body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  ${resumeClone.innerHTML}
+  
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center;">
+    <p style="font-size: 10px; color: #697386;">
+      Generated via Saanvi Careers | ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+  </div>
+</body>
+</html>
+                                `.trim();
+                                
+                                // Create blob and download
+                                const blob = new Blob([htmlContent], { type: 'text/html' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${profile.name.replace(/\s+/g, '_')}_ATS_Resume.html`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                                
+                                toast({ 
+                                  title: 'Resume Downloaded', 
+                                  description: 'ATS resume downloaded as HTML. Open in browser and print to PDF.' 
+                                });
+                              }}
+                              className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium rounded-lg transition-colors"
+                            >
+                              <Download size={12} />
+                              Download
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      
                       <a
                         href={`https://wa.me/918074172398?text=${encodeURIComponent(`Hi! I just applied for ${lastAppliedJob?.title || 'a role'} via Saanvi Careers. I'd like to get my ATS resume built. My name is ${profile.name}.`)}`}
                         target="_blank" rel="noopener noreferrer"
@@ -863,7 +1257,8 @@ export default function JobFinderPage() {
                 </div>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
+        </motion.div>
         )}
       </AnimatePresence>
     </div>

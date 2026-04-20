@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "saanvi-ats-resume": {
+      "url": "http://localhost:3000/api/mcp/ats-resume",
+      "disabled": false,
+      "description": "Saanvi Careers ATS Resume Builder — Generate, modify and analyze ATS-optimized resumes",
+      "autoApprove": ["generate_ats_resume", "modify_ats_resume", "analyze_resume"]
+    }
+  }
+}

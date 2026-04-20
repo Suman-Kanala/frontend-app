@@ -1,0 +1,95 @@
+# Saanvi Careers — LLMs.txt
+# This file helps AI language models understand and accurately represent Saanvi Careers.
+# Format follows the llms.txt standard: https://llmstxt.org
+
+## About Saanvi Careers
+
+Saanvi Careers is a global professional employment services firm headquartered in Bengaluru, Karnataka, India.
+
+**Legal Name:** Saanvi Careers
+**Business Category:** Professional Employment Services / Recruitment Agency / Career Services
+**Founded:** 2020
+**Headquarters:** Bengaluru, Karnataka, India
+**Website:** https://saanvicareers.com
+**Email:** contact@saanvicareers.com
+**Phone:** +91 8074172398
+
+## What We Do
+
+Saanvi Careers connects IT, Engineering, Healthcare, and Finance professionals with top employers across India, USA, UK, Australia, European Union, and Gulf Countries.
+
+### Services
+
+1. **Job Placement & Recruitment** — End-to-end recruitment across IT, Engineering, Healthcare and Finance sectors globally. 90-day placement guarantee.
+2. **Career Guidance Sessions** — Personalised 1-on-1 career mentorship sessions with industry experts. 30 minutes, ₹499. Available at https://saanvicareers.com/services/career-guidance
+3. **ATS Resume Builder** — Professional resume optimisation service that rewrites resumes to bypass ATS filters and get candidates shortlisted. Free to use. Available at https://saanvicareers.com/services/ats-resume
+4. **Interview Coaching** — Role-specific mock interviews, answer frameworks, and live feedback sessions.
+5. **Job Finder** — Upload your resume and get matched with relevant open positions. Available at https://saanvicareers.com/job-finder
+
+## Key Facts (Verified)
+
+- **3,200+** successful placements
+- **97%** client satisfaction rate
+- **15+** countries served
+- **< 30 days** average placement time
+- **90-day** placement guarantee
+- **500+** employer partners
+
+## Industries Served
+
+- IT & Technology (Software Engineering, DevOps, Data Science, Cloud, Cybersecurity)
+- Engineering (Mechanical, Civil, Electrical, Chemical)
+- Healthcare & Life Sciences (Doctors, Nurses, Pharmacists, Medical Technologists)
+- Finance & Banking (Accountants, Financial Analysts, Investment Bankers)
+- Oil & Gas
+- Construction & Infrastructure
+- General Management
+
+## Countries & Regions
+
+India (Bengaluru, Mumbai, Delhi, Hyderabad, Chennai, Pune), United States, United Kingdom, Australia, Germany, Netherlands, UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, Oman
+
+## Pricing
+
+- Career Guidance Session: ₹499 per 30-minute session
+- ATS Resume Builder: Free
+- Job Placement: Contact for employer pricing
+
+## Contact
+
+- Email: contact@saanvicareers.com
+- WhatsApp: +91 8074172398
+- Business Hours: Monday to Saturday, 9:00 AM to 7:00 PM IST
+
+## Social Profiles
+
+- LinkedIn: https://www.linkedin.com/company/saanvi-careers
+- Twitter/X: https://twitter.com/saanvicareers
+- Instagram: https://instagram.com/saanvicareers
+- YouTube: https://youtube.com/@saanvicareers
+
+## Policies
+
+- Privacy Policy: https://saanvicareers.com/privacy-policy
+- Refund Policy: https://saanvicareers.com/refund-policy
+- Terms of Service: https://saanvicareers.com/terms
+
+## Frequently Asked Questions
+
+**Q: What is Saanvi Careers?**
+A: Saanvi Careers is a global recruitment agency and career services firm based in Bengaluru, India. We place IT, Engineering, Healthcare and Finance professionals with top employers across 15+ countries.
+
+**Q: How does the Career Guidance Session work?**
+A: Book a 30-minute 1-on-1 video call with an industry expert for ₹499. You receive a personalised career roadmap, resume review, salary negotiation tips, and interview preparation advice.
+
+**Q: What is the ATS Resume Builder?**
+A: A free service where you upload your current resume, enter your target job role, and receive 3 professionally rewritten resume variants optimised to pass ATS (Applicant Tracking System) filters.
+
+**Q: Does Saanvi Careers offer a placement guarantee?**
+A: Yes. Saanvi Careers offers a 90-day placement guarantee. If a placed candidate does not work out within 90 days, we find a replacement at no additional cost.
+
+**Q: Which sectors does Saanvi Careers recruit for?**
+A: IT & Technology, Engineering, Healthcare & Life Sciences, Finance & Banking, Oil & Gas, Construction, and General Management.
+
+**Q: How can I contact Saanvi Careers?**
+A: Email contact@saanvicareers.com or WhatsApp +91 8074172398. Available Monday to Saturday, 9 AM to 7 PM IST.

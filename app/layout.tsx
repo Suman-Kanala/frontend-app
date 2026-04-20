@@ -13,44 +13,67 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const BASE_URL = 'https://saanvicareers.com';
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saanvicareers.com'),
+  metadataBase: new URL(BASE_URL),
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
     shortcut: '/favicon.svg',
-    apple: '/apple-touch-icon.png',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   title: {
-    default: 'Saanvi Careers – Find Jobs, Upskill & Get Placed Globally',
+    default: 'Saanvi Careers – Recruitment Agency India | Global Job Placement',
     template: '%s | Saanvi Careers',
   },
   description:
-    'Saanvi Careers is a global recruitment and career services firm. We connect IT, Engineering, Healthcare and Finance professionals with top employers across India, USA, UK, Australia, EU and Gulf Countries. 2,500+ placements. 24/7 support.',
+    'Saanvi Careers is India\'s trusted global recruitment agency. We place IT, Engineering, Healthcare and Finance professionals with top employers across India, USA, UK, Australia, EU and Gulf. 3,200+ placements. 97% success rate. 90-day guarantee.',
   keywords: [
-    'careers', 'jobs', 'recruitment agency India', 'job placement', 'IT jobs India',
-    'engineering jobs', 'healthcare recruitment', 'global hiring', 'Gen AI course',
-    'interview support', 'Bangalore tech jobs', 'overseas jobs from India',
-    'placement agency', 'professional employment services', 'career coaching',
-    'LLM training', 'AI jobs', 'software jobs Bangalore', 'remote jobs India',
+    'recruitment agency India',
+    'job placement India',
+    'IT jobs India',
+    'engineering recruitment India',
+    'healthcare jobs abroad',
+    'finance jobs India',
+    'global recruitment agency',
+    'career guidance India',
+    'resume builder India',
+    'ATS resume',
+    'interview coaching India',
+    'jobs in USA for Indians',
+    'jobs in UK for Indians',
+    'jobs in Gulf for Indians',
+    'Bangalore tech jobs',
+    'software engineer jobs India',
+    'overseas jobs from India',
+    'placement agency Bengaluru',
+    'professional employment services India',
+    'career services India',
   ],
-  authors: [{ name: 'Saanvi Careers', url: 'https://saanvicareers.com' }],
+  authors: [{ name: 'Saanvi Careers', url: BASE_URL }],
   creator: 'Saanvi Careers',
   publisher: 'Saanvi Careers',
   category: 'Employment & Careers',
+  classification: 'Professional Employment Services',
+  referrer: 'origin-when-cross-origin',
+  formatDetection: { email: false, address: false, telephone: false },
   openGraph: {
     siteName: 'Saanvi Careers',
     type: 'website',
-    locale: 'en_US',
-    url: 'https://saanvicareers.com',
-    title: 'Saanvi Careers – Find Jobs, Upskill & Get Placed Globally',
+    locale: 'en_IN',
+    url: BASE_URL,
+    title: 'Saanvi Careers – Recruitment Agency India | Global Job Placement',
     description:
-      'Connecting talent with opportunities across IT, Engineering, Healthcare and Finance. 2,500+ placements across 15+ countries.',
+      'India\'s trusted global recruitment agency. 3,200+ placements across IT, Engineering, Healthcare and Finance in 15+ countries. 97% success rate.',
     images: [
       {
-        url: '/og-image.png',
+        url: `${BASE_URL}/og-image.png`,
         width: 1200,
         height: 630,
-        alt: 'Saanvi Careers – Global Job Placement & Career Services',
+        alt: 'Saanvi Careers – Global Recruitment & Career Services',
         type: 'image/png',
       },
     ],
@@ -59,24 +82,37 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@saanvicareers',
     creator: '@saanvicareers',
-    title: 'Saanvi Careers – Find Jobs, Upskill & Get Placed Globally',
+    title: 'Saanvi Careers – Recruitment Agency India | Global Job Placement',
     description:
-      'Connecting talent with opportunities across IT, Engineering, Healthcare and Finance. 2,500+ placements across 15+ countries.',
-    images: ['/og-image.png'],
+      'India\'s trusted global recruitment agency. 3,200+ placements. 97% success rate. IT, Engineering, Healthcare & Finance.',
+    images: [`${BASE_URL}/og-image.png`],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
   },
   alternates: {
-    canonical: 'https://saanvicareers.com',
+    canonical: BASE_URL,
+    languages: {
+      'en-IN': BASE_URL,
+      'en-US': BASE_URL,
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
+  other: {
+    'msapplication-TileColor': '#635bff',
+    'msapplication-config': '/browserconfig.xml',
   },
 };
 
@@ -84,24 +120,25 @@ export const metadata: Metadata = {
 
 const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': ['Organization', 'ProfessionalService'],
-  '@id': 'https://saanvicareers.com/#organization',
+  '@type': ['Organization', 'ProfessionalService', 'EmploymentAgency'],
+  '@id': `${BASE_URL}/#organization`,
   name: 'Saanvi Careers',
   legalName: 'Saanvi Careers',
-  url: 'https://saanvicareers.com',
+  url: BASE_URL,
   logo: {
     '@type': 'ImageObject',
-    '@id': 'https://saanvicareers.com/#logo',
-    url: 'https://saanvicareers.com/logo.png',
-    contentUrl: 'https://saanvicareers.com/logo.png',
+    '@id': `${BASE_URL}/#logo`,
+    url: `${BASE_URL}/logo.png`,
+    contentUrl: `${BASE_URL}/logo.png`,
     width: 512,
     height: 512,
     caption: 'Saanvi Careers',
   },
-  image: 'https://saanvicareers.com/og-image.png',
+  image: `${BASE_URL}/og-image.png`,
   description:
-    'Saanvi Careers is a global professional employment services and career upskilling firm. We specialise in IT, Engineering, Healthcare and Finance placements across India, USA, UK, Australia, EU and Gulf Countries with 2,500+ successful placements.',
+    'Saanvi Careers is a global professional employment services firm specialising in IT, Engineering, Healthcare and Finance placements across India, USA, UK, Australia, EU and Gulf Countries. 3,200+ successful placements with 97% client satisfaction.',
   foundingDate: '2020',
+  numberOfEmployees: { '@type': 'QuantitativeValue', value: 50 },
   areaServed: [
     { '@type': 'Country', name: 'India' },
     { '@type': 'Country', name: 'United States' },
@@ -115,13 +152,22 @@ const organizationSchema = {
     addressCountry: 'IN',
     addressRegion: 'Karnataka',
     addressLocality: 'Bengaluru',
+    postalCode: '560001',
   },
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      contactType: 'customer support',
+      telephone: '+91-8074172398',
+      contactType: 'customer service',
+      email: 'contact@saanvicareers.com',
       availableLanguage: ['English', 'Hindi'],
       areaServed: 'Worldwide',
+      hoursAvailable: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '09:00',
+        closes: '19:00',
+      },
     },
   ],
   hasOfferCatalog: {
@@ -134,22 +180,40 @@ const organizationSchema = {
           '@type': 'Service',
           name: 'IT & Tech Job Placement',
           description: 'End-to-end IT and technology recruitment for top employers globally.',
+          serviceType: 'Recruitment',
+          areaServed: 'Worldwide',
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Generative AI Training Program',
-          description: '14-day intensive Gen AI course with placement support at ₹4,999.',
+          name: 'Career Guidance Session',
+          description: 'Personalised 1-on-1 career mentorship session with industry experts.',
+          serviceType: 'Career Coaching',
+          offers: {
+            '@type': 'Offer',
+            price: '499',
+            priceCurrency: 'INR',
+          },
         },
       },
       {
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
-          name: 'Interview Preparation & Support',
-          description: 'Live mock interviews and coaching by industry experts.',
+          name: 'ATS Resume Builder',
+          description: 'Professional resume optimisation service that bypasses ATS filters.',
+          serviceType: 'Resume Writing',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Interview Preparation & Coaching',
+          description: 'Role-specific mock interviews and coaching by industry experts.',
+          serviceType: 'Career Coaching',
         },
       },
       {
@@ -158,47 +222,61 @@ const organizationSchema = {
           '@type': 'Service',
           name: 'Global Recruitment Services',
           description: 'Connecting professionals with employers across 15+ countries.',
-        },
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'AI-Powered Job Finder',
-          description: 'Upload your resume and get AI-matched to the best open roles.',
+          serviceType: 'Recruitment',
+          areaServed: 'Worldwide',
         },
       },
     ],
   },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '3200',
+    bestRating: '5',
+    worstRating: '1',
+  },
   knowsAbout: [
     'IT Recruitment', 'Engineering Recruitment', 'Healthcare Staffing',
-    'Finance Jobs', 'Generative AI', 'Machine Learning', 'Software Development',
-    'Career Coaching', 'Resume Writing', 'Interview Preparation',
+    'Finance Jobs', 'Software Development', 'Career Coaching',
+    'Resume Writing', 'Interview Preparation', 'Global Placement',
   ],
   sameAs: [
     'https://www.linkedin.com/company/saanvi-careers',
     'https://twitter.com/saanvicareers',
+    'https://instagram.com/saanvicareers',
+    'https://youtube.com/@saanvicareers',
   ],
 };
 
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  '@id': 'https://saanvicareers.com/#website',
+  '@id': `${BASE_URL}/#website`,
   name: 'Saanvi Careers',
-  url: 'https://saanvicareers.com',
-  description:
-    'Find jobs, upskill with AI courses, and get placed globally with Saanvi Careers.',
-  publisher: { '@id': 'https://saanvicareers.com/#organization' },
-  inLanguage: 'en',
+  url: BASE_URL,
+  description: 'Global recruitment agency and career services platform. Find jobs, get career guidance, and build ATS-optimised resumes.',
+  publisher: { '@id': `${BASE_URL}/#organization` },
+  inLanguage: 'en-IN',
+  copyrightYear: new Date().getFullYear(),
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://saanvicareers.com/job-finder?q={search_term_string}',
+      urlTemplate: `${BASE_URL}/job-finder?q={search_term_string}`,
     },
     'query-input': 'required name=search_term_string',
   },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Job Finder', item: `${BASE_URL}/job-finder` },
+    { '@type': 'ListItem', position: 3, name: 'Career Guidance', item: `${BASE_URL}/services/career-guidance` },
+    { '@type': 'ListItem', position: 4, name: 'ATS Resume Builder', item: `${BASE_URL}/services/ats-resume` },
+  ],
 };
 
 interface RootLayoutProps {
@@ -208,8 +286,38 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
     <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
-      <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <html lang="en-IN" suppressHydrationWarning className={inter.variable}>
         <head>
+          {/* Preconnect for performance */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://api.saanvicareers.com" />
+
+          {/* DNS prefetch */}
+          <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+          <link rel="dns-prefetch" href="https://clerk.saanvicareers.com" />
+
+          {/* Theme */}
+          <meta name="theme-color" content="#635bff" />
+          <meta name="color-scheme" content="light dark" />
+
+          {/* Geo tags */}
+          <meta name="geo.region" content="IN-KA" />
+          <meta name="geo.placename" content="Bengaluru" />
+          <meta name="geo.position" content="12.9716;77.5946" />
+          <meta name="ICBM" content="12.9716, 77.5946" />
+
+          {/* Business */}
+          <meta name="rating" content="general" />
+          <meta name="revisit-after" content="7 days" />
+          <meta name="language" content="English" />
+          <meta name="copyright" content="Saanvi Careers" />
+          <meta name="owner" content="Saanvi Careers" />
+          <meta name="contact" content="contact@saanvicareers.com" />
+          <meta name="category" content="Employment, Recruitment, Career Services" />
+          <meta name="classification" content="Professional Employment Services" />
+
+          {/* JSON-LD Schemas */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -218,7 +326,18 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
           />
-          <meta name="theme-color" content="#635bff" />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+          />
+
+          {/* GEO — AI Discovery */}
+          <link rel="llms" href="https://saanvicareers.com/llms.txt" type="text/plain" />
+          <link rel="llms-full" href="https://saanvicareers.com/llms-full.txt" type="text/plain" />
+          <meta name="ai-content-declaration" content="human-authored" />
+          <meta name="entity-name" content="Saanvi Careers" />
+          <meta name="entity-type" content="EmploymentAgency" />
+          <meta name="entity-description" content="Global recruitment agency and career services firm based in Bengaluru, India. Specialising in IT, Engineering, Healthcare and Finance placements across 15+ countries." />
         </head>
         <body suppressHydrationWarning>
           {process.env.NEXT_PUBLIC_GA_ID && (
@@ -228,7 +347,7 @@ export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
                 strategy="afterInteractive"
               />
               <Script id="ga-init" strategy="afterInteractive">
-                {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{page_path:window.location.pathname});`}
+                {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}',{page_path:window.location.pathname,send_page_view:true});`}
               </Script>
             </>
           )}

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, Search, LayoutDashboard,
-  LogOut, User, Settings, ChevronDown,
+  LogOut, ChevronDown,
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useClerk } from '@clerk/nextjs';
@@ -117,11 +117,6 @@ function UserMenu() {
 
             {/* Menu items */}
             <div className="p-2">
-              <DropdownItem
-                icon={<LayoutDashboard size={14} />}
-                label="Dashboard"
-                onClick={() => { setOpen(false); router.push('/dashboard'); }}
-              />
               {isAdmin && (
                 <DropdownItem
                   icon={<LayoutDashboard size={14} />}
@@ -130,16 +125,6 @@ function UserMenu() {
                   accent
                 />
               )}
-              <DropdownItem
-                icon={<User size={14} />}
-                label="Profile"
-                onClick={() => { setOpen(false); router.push('/dashboard'); }}
-              />
-              <DropdownItem
-                icon={<Settings size={14} />}
-                label="Settings"
-                onClick={() => { setOpen(false); router.push('/dashboard'); }}
-              />
 
               {/* Divider */}
               <div className="my-1.5 h-px bg-[#E6EBF1] dark:bg-white/[0.07]" />
@@ -207,6 +192,20 @@ const Header: React.FC = () => {
     { name: 'Contact',      href: '#contact'    },
   ];
 
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  // Close services dropdown on outside click
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
+        setServicesOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   function scrollTo(href: string): void {
     if (pathname !== '/') {
       router.push('/');
@@ -254,6 +253,63 @@ const Header: React.FC = () => {
                   {item.name}
                 </button>
               ))}
+              
+              {/* Services Dropdown - E-commerce Style */}
+              <div 
+                ref={servicesRef} 
+                className="relative"
+                onMouseEnter={() => setServicesOpen(true)}
+                onMouseLeave={() => setServicesOpen(false)}
+              >
+                <button
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors inline-flex items-center gap-1"
+                >
+                  Services
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${servicesOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                <AnimatePresence>
+                  {servicesOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.2, ease: 'easeOut' }}
+                      className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-[#1a1f2e] rounded-lg shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50"
+                    >
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setServicesOpen(false);
+                            go('/services/career-guidance');
+                          }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                        >
+                          Career Guidance
+                        </button>
+                        <button
+                          onClick={() => {
+                            setServicesOpen(false);
+                            go('/services/ats-resume');
+                          }}
+                          className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                        >
+                          ATS Resume Builder
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              
               <button
                 onClick={() => go('/job-finder')}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -338,6 +394,20 @@ const Header: React.FC = () => {
                     {item.name}
                   </button>
                 ))}
+                
+                {/* Services in mobile */}
+                <button
+                  onClick={() => go('/services/career-guidance')}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white transition-colors"
+                >
+                  Career Guidance
+                </button>
+                <button
+                  onClick={() => go('/services/ats-resume')}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white transition-colors"
+                >
+                  ATS Resume Builder
+                </button>
 
                 <div className="pt-3 mt-1 border-t border-[#E6EBF1] dark:border-white/[0.07] space-y-2">
                   <button
@@ -408,10 +478,6 @@ function MobileUserCard() {
       </div>
       {/* Actions */}
       <div className="p-2 space-y-0.5">
-        <button onClick={() => router.push('/dashboard')}
-          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white transition-colors">
-          <LayoutDashboard size={14} /> Dashboard
-        </button>
         {isAdmin && (
           <button onClick={() => router.push('/admin')}
             className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-colors">

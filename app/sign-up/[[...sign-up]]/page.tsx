@@ -13,7 +13,7 @@ export default function SignUpPage() {
         routing="path"
         path="/sign-up"
         signInUrl="/sign-in"
-        forceRedirectUrl="/"
+        forceRedirectUrl="/?auth=signin"
         appearance={{
           variables: {
             colorPrimary: '#635bff',

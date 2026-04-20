@@ -38,78 +38,47 @@ const nextConfig = {
 
   async headers() {
     return [
-      // Security headers for all routes
+      // Security + SEO headers for all routes
       {
         source: '/:path*',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
+          { key: 'X-DNS-Prefetch-Control',    value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Frame-Options',           value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options',    value: 'nosniff' },
+          { key: 'X-XSS-Protection',          value: '1; mode=block' },
+          { key: 'Referrer-Policy',           value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy',        value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
+          { key: 'X-Robots-Tag',              value: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
         ],
       },
-      // Static public pages — CDN-cacheable, ISR-controlled revalidation
+      // Static public pages — CDN cacheable
       {
-        source: '/(|courses|ai-program|job-finder|learn/:slug*)',
+        source: '/(|job-finder|services/:path*|about|privacy-policy|refund-policy|shipping-policy|terms)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=3600, stale-while-revalidate=60',
-          },
+          { key: 'Cache-Control', value: 'public, max-age=0, s-maxage=3600, stale-while-revalidate=60' },
         ],
       },
-      // Course detail pages — 5-min CDN cache with stale fallback
+      // Auth + admin — never cached
       {
-        source: '/courses/:slug',
+        source: '/(admin|payment|sign-in|sign-up|sso-callback)(.*)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=60',
-          },
+          { key: 'Cache-Control', value: 'private, no-store, no-cache' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
         ],
       },
-      // Auth + dynamic user pages — never CDN-cached
-      {
-        source: '/(dashboard|admin|payment|interview-support|sign-in|sign-up|sso-callback)(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'private, no-store, no-cache',
-          },
-        ],
-      },
-      // Public folder assets
+      // Static assets — long cache
       {
         source: '/static/:path*',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // Images
+      {
+        source: '/:path*.{jpg,jpeg,png,gif,webp,avif,svg,ico}',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=3600' },
         ],
       },
     ];

@@ -37,7 +37,7 @@ export function AdminRoute({ children }: ProtectedRouteProps): JSX.Element {
       if (!isAuthenticated) {
         router.replace('/');
       } else if (user && !isAdmin) {
-        router.replace('/dashboard');
+        router.replace('/');
       }
     }
   }, [loading, isAuthenticated, isAdmin, user, router]);
@@ -56,7 +56,7 @@ export function RoleRoute({ children, roles = [] }: RoleRouteProps): JSX.Element
       if (!isAuthenticated) {
         router.replace('/');
       } else if (user && !hasRole(...roles)) {
-        router.replace('/dashboard');
+        router.replace('/');
       }
     }
   }, [loading, isAuthenticated, user, router]);

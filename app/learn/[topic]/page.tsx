@@ -161,8 +161,10 @@ export default async function LearnTopicPage({ params }: TopicPageProps): Promis
               >
                 Browse Courses →
               </Link>
-              <Link
-                href="/ai-program"
+              <button
+                onClick={() => {
+                  window.location.href = '/#contact';
+                }}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-purple-200 text-purple-700 text-sm font-semibold hover:bg-purple-50 transition-colors"
               >
                 ✦ Gen AI Program
@@ -199,8 +201,10 @@ export default async function LearnTopicPage({ params }: TopicPageProps): Promis
               >
                 View All Courses
               </Link>
-              <Link
-                href="/ai-program"
+              <button
+                onClick={() => {
+                  window.location.href = '/#contact';
+                }}
                 className="px-5 py-2.5 rounded-xl bg-white/10 border border-white/30 text-white text-sm font-semibold hover:bg-white/20 transition-colors"
               >
                 Gen AI Program

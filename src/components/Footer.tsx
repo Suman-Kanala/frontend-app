@@ -1,215 +1,190 @@
 'use client';
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram, Send, MessageCircle, LucideIcon } from "lucide-react";
-import { usePathname, useRouter } from 'next/navigation';
-import Logo from "@/components/Logo";
+import React from 'react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import Logo from '@/components/Logo';
+import { Linkedin, Instagram, Youtube, ArrowRight } from 'lucide-react';
 
-interface FooterLink {
-  name: string;
-  href: string;
+// X (formerly Twitter) — official logo SVG
+function XIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
 }
 
-interface SocialLink {
-  icon: LucideIcon;
-  name: string;
-  url: string;
-}
+const NAV = [
+  {
+    heading: 'Services',
+    links: [
+      { label: 'AI Job Finder',       href: '/job-finder',                  external: false },
+      { label: 'Career Guidance',     href: '/services/career-guidance',    external: false },
+      { label: 'ATS Resume Builder',  href: '/services/ats-resume',         external: false },
+      { label: 'Interview Coaching',  href: '/#contact',                    external: false },
+      { label: 'Global Recruitment',  href: '/#contact',                    external: false },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About Us',      href: '/about',           external: false },
+      { label: 'How It Works',  href: '/#how-it-works',   external: false },
+      { label: 'Industries',    href: '/#industries',     external: false },
+      { label: 'Contact Us',    href: '/#contact',        external: false },
+      { label: 'For Employers', href: '/#contact',        external: false },
+    ],
+  },
+  {
+    heading: 'Legal',
+    links: [
+      { label: 'Privacy Policy',      href: '/privacy-policy',   external: false },
+      { label: 'Refund Policy',       href: '/refund-policy',    external: false },
+      { label: 'Shipping & Delivery', href: '/shipping-policy',  external: false },
+      { label: 'Terms of Service',    href: '/terms',            external: false },
+    ],
+  },
+];
 
-const Footer: React.FC = () => {
+const SOCIALS = [
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/saanvi-careers', Icon: Linkedin  },
+  { label: 'X',         href: 'https://twitter.com/saanvicareers',               Icon: XIcon     },
+  { label: 'Instagram', href: 'https://instagram.com/saanvicareers',             Icon: Instagram },
+  { label: 'YouTube',   href: 'https://youtube.com/@saanvicareers',              Icon: Youtube   },
+];
+
+function FooterLink({ href, label }: { href: string; label: string }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleNavClick = (href: string): void => {
-    if (pathname !== '/') {
-      router.push('/');
-      setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 100);
-    } else {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  const handleClick = (e: React.MouseEvent) => {
+    if (href.startsWith('/#')) {
+      e.preventDefault();
+      const id = href.slice(2);
+      if (pathname !== '/') {
+        router.push('/');
+        setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 200);
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
-  const quickLinks: FooterLink[] = [
-    { name: "About Us",        href: "#about" },
-    { name: "Industries",      href: "#industries" },
-    { name: "How It Works",    href: "#how-it-works" },
-    { name: "Global Presence", href: "#global" },
-    { name: "Contact Us",      href: "#contact" },
-  ];
+  return (
+    <Link
+      href={href}
+      onClick={handleClick}
+      className="group flex items-center gap-1.5 text-sm text-[#697386] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white transition-colors duration-150"
+    >
+      <ArrowRight
+        size={11}
+        className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-150 text-[#635bff] flex-shrink-0"
+      />
+      {label}
+    </Link>
+  );
+}
 
-  const industries: FooterLink[] = [
-    { name: "IT & Software", href: "#industries" },
-    { name: "Engineering",   href: "#industries" },
-    { name: "Healthcare",    href: "#industries" },
-    { name: "Finance",       href: "#industries" },
-    { name: "Entry Level",   href: "#industries" },
-  ];
-
-  const locations: FooterLink[] = [
-    { name: "India",          href: "#global" },
-    { name: "United States",  href: "#global" },
-    { name: "United Kingdom", href: "#global" },
-    { name: "Australia",      href: "#global" },
-    { name: "European Union", href: "#global" },
-    { name: "Gulf Countries", href: "#global" },
-  ];
-
-  const socialLinks: SocialLink[] = [
-    { icon: Linkedin,      name: "LinkedIn",  url: "https://www.linkedin.com/in/saanvi-careers-8a86a2379" },
-    { icon: Facebook,      name: "Facebook",  url: "https://www.facebook.com/profile.php?id=61579327944939" },
-    { icon: Twitter,       name: "X",         url: "https://x.com/SaanviCareers" },
-    { icon: Instagram,     name: "Instagram", url: "https://www.instagram.com/saanvicareers/" },
-    { icon: Send,          name: "Telegram",  url: "https://t.me/SaanviCareers" },
-    {
-      icon: MessageCircle, name: "WhatsApp",
-      url: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "918074172398"}?text=Hi%2C%20I%20want%20to%20know%20about%20Saanvi%20Careers`,
-    },
-  ];
-
-  const linkClass = "text-sm text-white/40 hover:text-white/80 transition-colors duration-150 block py-0.5";
+export default function Footer() {
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0a2540]">
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
+    <footer className="bg-[#F6F9FC] dark:bg-[#060e1d] border-t border-[#E6EBF1] dark:border-white/[0.07]">
+      <div className="max-w-7xl mx-auto px-6">
 
-        {/* Main grid */}
-        <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-10 mb-14">
+        {/* ── MAIN GRID ── */}
+        <div className="py-16 grid grid-cols-2 md:grid-cols-12 gap-y-12 gap-x-8">
 
-          {/* Brand column */}
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Logo on dark bg */}
-              <div className="mb-4">
-                <Logo size="default" />
-              </div>
-              <p className="text-white/45 text-sm leading-relaxed mb-6 max-w-xs">
-                Connecting exceptional talent with transformative opportunities across the globe. Your trusted partner in career advancement.
-              </p>
+          {/* Brand — 4 cols */}
+          <div className="col-span-2 md:col-span-4 flex flex-col gap-6">
+            <Logo size="default" />
 
-              {/* Contact */}
-              <div className="space-y-2.5">
-                {[
-                  { icon: Mail,   text: "contact@saanvicareers.com" },
-                  { icon: Phone,  text: "+91 8074172398" },
-                  { icon: MapPin, text: "Global Offices Worldwide" },
-                ].map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-3">
-                    <Icon size={15} className="text-[#635bff] flex-shrink-0" />
-                    <span className="text-white/45 text-sm">{text}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
+            <p className="text-sm text-[#697386] dark:text-[#8898aa] leading-relaxed max-w-[280px]">
+              Global recruitment and career services firm. Connecting talent with opportunities across IT, Engineering, Healthcare and Finance in 15+ countries.
+            </p>
 
-          {/* Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-          >
-            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Quick Links</p>
-            <ul className="space-y-0.5">
-              {quickLinks.map((link, i) => (
-                <li key={i}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                    className={linkClass}
-                  >
-                    {link.name}
-                  </a>
-                </li>
+            {/* Social icons */}
+            <div className="flex items-center gap-2">
+              {SOCIALS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-8 h-8 rounded-lg bg-white dark:bg-white/5 border border-[#E6EBF1] dark:border-white/[0.08] flex items-center justify-center text-[#697386] dark:text-[#8898aa] hover:text-[#635bff] hover:border-[#635bff]/40 dark:hover:text-[#635bff] dark:hover:border-[#635bff]/40 transition-all duration-150"
+                >
+                  <Icon size={14} />
+                </a>
               ))}
-            </ul>
-          </motion.div>
+            </div>
 
-          {/* Industries */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Industries</p>
-            <ul className="space-y-0.5">
-              {industries.map((item, i) => (
-                <li key={i}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
-                    className={linkClass}
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Locations */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-          >
-            <p className="text-xs font-bold text-white/25 uppercase tracking-[0.15em] mb-4">Locations</p>
-            <ul className="space-y-0.5">
-              {locations.map((item, i) => (
-                <li key={i}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
-                    className={linkClass}
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-
-        {/* Bottom bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="border-t border-white/[0.08] pt-8 flex flex-col md:flex-row justify-between items-center gap-5"
-        >
-          <p className="text-white/30 text-sm">
-            &copy; {new Date().getFullYear()} Saanvi Careers. All rights reserved.
-          </p>
-
-          {/* Social icons */}
-          <div className="flex items-center gap-2.5">
-            {socialLinks.map((social, i) => (
-              <motion.a
-                key={i}
-                href={social.url}
+            {/* Contact */}
+            <div className="space-y-1.5">
+              <a
+                href="mailto:contact@saanvicareers.com"
+                className="block text-sm text-[#697386] dark:text-[#8898aa] hover:text-[#635bff] dark:hover:text-[#635bff] transition-colors"
+              >
+                contact@saanvicareers.com
+              </a>
+              <a
+                href="https://wa.me/918074172398"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-150 ${
-                  social.name === "WhatsApp"
-                    ? "bg-[#25D366] hover:bg-[#1ebe5d]"
-                    : "bg-white/[0.08] hover:bg-white/[0.15]"
-                }`}
-                aria-label={social.name}
+                className="block text-sm text-[#697386] dark:text-[#8898aa] hover:text-[#635bff] dark:hover:text-[#635bff] transition-colors"
               >
-                <social.icon size={16} className="text-white" />
-              </motion.a>
+                +91 8074172398
+              </a>
+              <p className="text-xs text-[#8898aa] dark:text-[#697386]">Mon–Sat, 9 AM – 7 PM IST</p>
+            </div>
+          </div>
+
+          {/* Spacer on md */}
+          <div className="hidden md:block md:col-span-1" />
+
+          {/* Link columns — 7 cols total */}
+          {NAV.map((col) => (
+            <div key={col.heading} className="col-span-1 md:col-span-2 flex flex-col gap-4">
+              <p className="text-xs font-bold text-[#0a2540] dark:text-white uppercase tracking-[0.12em]">
+                {col.heading}
+              </p>
+              <ul className="flex flex-col gap-3">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <FooterLink href={link.href} label={link.label} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* ── BOTTOM BAR ── */}
+        <div className="py-6 border-t border-[#E6EBF1] dark:border-white/[0.07] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-[#8898aa] dark:text-[#697386] text-center sm:text-left">
+            © {year}{' '}
+            <span className="text-[#425466] dark:text-[#8898aa] font-semibold">Saanvi Careers</span>
+            {' '}· All rights reserved · Professional Employment Services · Bengaluru, India
+          </p>
+          <div className="flex items-center gap-4">
+            {[
+              { label: 'Privacy', href: '/privacy-policy' },
+              { label: 'Refunds', href: '/refund-policy' },
+              { label: 'Terms',   href: '/terms' },
+            ].map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
+                className="text-xs text-[#8898aa] dark:text-[#697386] hover:text-[#0a2540] dark:hover:text-white transition-colors"
+              >
+                {label}
+              </Link>
             ))}
           </div>
-        </motion.div>
+        </div>
+
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

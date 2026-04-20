@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Briefcase, ExternalLink, RefreshCw, MapPin } from 'lucide-react';
 
 interface JobItem {
@@ -17,6 +17,7 @@ const NewsTicker: React.FC = () => {
   const [isLoading, setLoading] = useState(true);
   const [isError, setError]     = useState(false);
   const [paused, setPaused]     = useState(false);
+  const touchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -34,9 +35,18 @@ const NewsTicker: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
+
+  // Auto-resume after 2s on mobile (in case touch gets stuck)
+  function handleTouchStart() {
+    setPaused(true);
+    if (touchTimer.current) clearTimeout(touchTimer.current);
+    touchTimer.current = setTimeout(() => setPaused(false), 2000);
+  }
+  function handleTouchEnd() {
+    if (touchTimer.current) clearTimeout(touchTimer.current);
+    touchTimer.current = setTimeout(() => setPaused(false), 800);
+  }
 
   /* ── Loading skeleton ─────────────────────────────────────────────────── */
   if (isLoading) {
@@ -79,6 +89,9 @@ const NewsTicker: React.FC = () => {
       className="bg-white dark:bg-[#0d1f33] border border-[#E6EBF1] dark:border-white/[0.07] rounded-2xl flex items-stretch overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={() => setPaused(false)}
     >
       {/* ── Label pill ─────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 px-4 py-3.5 bg-[#0a2540] flex-shrink-0">
@@ -89,22 +102,21 @@ const NewsTicker: React.FC = () => {
       </div>
 
       {/* ── Scrolling strip ────────────────────────────────────────────── */}
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-hidden relative min-w-0">
 
         {/* Fade edges — light */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none dark:hidden"
+        <div className="absolute left-0 top-0 bottom-0 w-6 z-10 pointer-events-none dark:hidden"
           style={{ background: 'linear-gradient(to right, white, transparent)' }} />
-        <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none dark:hidden"
+        <div className="absolute right-0 top-0 bottom-0 w-6 z-10 pointer-events-none dark:hidden"
           style={{ background: 'linear-gradient(to left, white, transparent)' }} />
         {/* Fade edges — dark */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none hidden dark:block"
+        <div className="absolute left-0 top-0 bottom-0 w-6 z-10 pointer-events-none hidden dark:block"
           style={{ background: 'linear-gradient(to right, #0d1f33, transparent)' }} />
-        <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none hidden dark:block"
+        <div className="absolute right-0 top-0 bottom-0 w-6 z-10 pointer-events-none hidden dark:block"
           style={{ background: 'linear-gradient(to left, #0d1f33, transparent)' }} />
 
         <div
-          className="flex items-center h-full"
-          style={{ animation: paused ? 'none' : 'scroll-marquee 80s linear infinite' }}
+          className={`flex items-center h-full scroll-animation ${paused ? 'marquee-paused' : ''}`}
         >
           {tickerItems.map((job, i) => (
             <a
@@ -120,7 +132,7 @@ const NewsTicker: React.FC = () => {
               </span>
 
               {/* Title */}
-              <span className="text-xs font-semibold text-[#0a2540] dark:text-white group-hover:text-[#635bff] transition-colors whitespace-nowrap max-w-[200px] truncate">
+              <span className="text-xs font-semibold text-[#0a2540] dark:text-white group-hover:text-[#635bff] transition-colors whitespace-nowrap max-w-[160px] sm:max-w-[200px] truncate">
                 {job.title}
               </span>
 
@@ -132,11 +144,11 @@ const NewsTicker: React.FC = () => {
                 {job.company}
               </span>
 
-              {/* Location */}
+              {/* Location — hidden on very small screens */}
               {job.location && (
                 <>
-                  <MapPin size={10} className="text-[#697386] dark:text-white/20 flex-shrink-0" />
-                  <span className="text-[11px] text-[#697386] dark:text-[#8898aa] whitespace-nowrap flex-shrink-0 max-w-[120px] truncate">
+                  <MapPin size={10} className="text-[#697386] dark:text-white/20 flex-shrink-0 hidden sm:block" />
+                  <span className="text-[11px] text-[#697386] dark:text-[#8898aa] whitespace-nowrap flex-shrink-0 max-w-[100px] truncate hidden sm:block">
                     {job.location}
                   </span>
                 </>
