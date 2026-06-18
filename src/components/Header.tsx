@@ -273,8 +273,11 @@ const Header: React.FC = () => {
                 className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#635bff] hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
               >
                 Courses
-                <span className="inline-flex items-center px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-md shadow-sm animate-pulse">
-                  New
+                <span className="relative inline-flex items-center justify-center w-10 h-10 -ml-1">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-gradient-to-r from-orange-500 to-red-500 opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 via-red-500 to-red-600 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg shadow-orange-500/50 animate-pulse">
+                    New
+                  </span>
                 </span>
               </a>
               <button
@@ -370,8 +373,11 @@ const Header: React.FC = () => {
                     className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 border border-[#635bff]/30 text-[#635bff] text-sm font-semibold rounded-full hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
                   >
                     Courses
-                    <span className="inline-flex items-center px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-md shadow-sm animate-pulse">
-                      New
+                    <span className="relative inline-flex items-center justify-center w-10 h-10 -ml-1">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-gradient-to-r from-orange-500 to-red-500 opacity-75 animate-ping"></span>
+                      <span className="relative inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 via-red-500 to-red-600 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg shadow-orange-500/50 animate-pulse">
+                        New
+                      </span>
                     </span>
                   </a>
                   <button
