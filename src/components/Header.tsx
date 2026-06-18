@@ -203,7 +203,6 @@ const Header: React.FC = () => {
   const navLinks: MenuItem[] = [
   { name: 'About',        href: '#about' },
   { name: 'Industries',   href: '#industries' },
-  { name: 'Courses',      href: 'https://courses.saanvicareers.com' },
   { name: 'How It Works', href: '#how-it-works' },
   { name: 'Contact',      href: '#contact' },
 ];
@@ -253,7 +252,7 @@ const Header: React.FC = () => {
       href={item.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors"
+      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#635bff] hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
     >
       {item.name}
     </a>
@@ -261,12 +260,23 @@ const Header: React.FC = () => {
     <button
       key={item.name}
       onClick={() => scrollTo(item.href)}
-      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors"
+      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#635bff] hover:bg-[#f0eefe] dark:hover:bg-[#635bff]/10 transition-colors"
     >
       {item.name}
     </button>
   )
 ))}
+              <a
+                href="https://courses.saanvicareers.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#635bff] hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
+              >
+                Courses
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                  New
+                </span>
+              </a>
               <button
                 onClick={() => go('/job-finder')}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -346,13 +356,24 @@ const Header: React.FC = () => {
                   <button
                     key={item.name}
                     onClick={() => scrollTo(item.href)}
-                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#F6F9FC] dark:hover:bg-white/5 hover:text-[#0a2540] dark:hover:text-white transition-colors"
+                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 hover:text-[#635bff] transition-colors"
                   >
                     {item.name}
                   </button>
                 ))}
 
                 <div className="pt-3 mt-1 border-t border-[#E6EBF1] dark:border-white/[0.07] space-y-2">
+                  <a
+                    href="https://courses.saanvicareers.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full relative inline-flex items-center justify-center gap-2 px-4 py-3 border border-[#635bff]/30 text-[#635bff] text-sm font-semibold rounded-full hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
+                  >
+                    Courses
+                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                      New
+                    </span>
+                  </a>
                   <button
                     onClick={() => go('/job-finder')}
                     className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 border border-[#635bff]/30 text-[#635bff] text-sm font-semibold rounded-full hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
