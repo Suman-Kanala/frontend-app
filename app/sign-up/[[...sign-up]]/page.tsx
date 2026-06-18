@@ -32,9 +32,6 @@ export default function SignUpPage() {
             socialButtonsBlockButton: 'border border-[#E6EBF1] text-sm font-semibold',
             footer: 'hidden',
           },
-          layout: {
-            socialButtonsPlacement: 'top',
-          },
         }}
       />
     </div>
