@@ -201,11 +201,12 @@ const Header: React.FC = () => {
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const navLinks: MenuItem[] = [
-    { name: 'About',        href: '#about'      },
-    { name: 'Industries',   href: '#industries' },
-    { name: 'How It Works', href: '#how-it-works' },
-    { name: 'Contact',      href: '#contact'    },
-  ];
+  { name: 'About',        href: '#about' },
+  { name: 'Industries',   href: '#industries' },
+  { name: 'Courses',      href: 'https://courses.saanvicareers.com' },
+  { name: 'How It Works', href: '#how-it-works' },
+  { name: 'Contact',      href: '#contact' },
+];
 
   function scrollTo(href: string): void {
     if (pathname !== '/') {
@@ -246,14 +247,26 @@ const Header: React.FC = () => {
             {/* Desktop nav links */}
             <div className="hidden lg:flex items-center gap-0.5">
               {navLinks.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollTo(item.href)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors"
-                >
-                  {item.name}
-                </button>
-              ))}
+  item.href.startsWith('http') ? (
+    <a
+      key={item.name}
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors"
+    >
+      {item.name}
+    </a>
+  ) : (
+    <button
+      key={item.name}
+      onClick={() => scrollTo(item.href)}
+      className="px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#0a2540] dark:hover:text-white hover:bg-[#F6F9FC] dark:hover:bg-white/5 transition-colors"
+    >
+      {item.name}
+    </button>
+  )
+))}
               <button
                 onClick={() => go('/job-finder')}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
