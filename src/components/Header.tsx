@@ -273,7 +273,7 @@ const Header: React.FC = () => {
                 className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-[#425466] dark:text-[#8898aa] hover:text-[#635bff] hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
               >
                 Courses
-                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                <span className="inline-flex items-center px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-md shadow-sm animate-pulse">
                   New
                 </span>
               </a>
@@ -367,10 +367,10 @@ const Header: React.FC = () => {
                     href="https://courses.saanvicareers.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full relative inline-flex items-center justify-center gap-2 px-4 py-3 border border-[#635bff]/30 text-[#635bff] text-sm font-semibold rounded-full hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 border border-[#635bff]/30 text-[#635bff] text-sm font-semibold rounded-full hover:bg-[#f0effe] dark:hover:bg-[#635bff]/10 transition-colors"
                   >
                     Courses
-                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                    <span className="inline-flex items-center px-1.5 py-0.5 bg-gradient-to-r from-[#635bff] to-[#818cf8] text-white text-[9px] font-bold uppercase tracking-wider rounded-md shadow-sm animate-pulse">
                       New
                     </span>
                   </a>
